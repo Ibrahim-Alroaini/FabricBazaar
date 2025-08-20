@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Search, Heart, ShoppingCart, User, Menu, X, Coins } from "lucide-react";
+import { Search, Heart, ShoppingCart, User, Menu, X, Coins, Package, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -87,11 +87,34 @@ export default function Navbar() {
               <span className="font-medium text-primary">AED</span>
             </div>
 
-            {/* Admin Link */}
-            <Link href="/admin">
+            {/* Admin Links */}
+            <div className="hidden sm:flex items-center space-x-2">
+              <Link href="/admin">
+                <Button variant="outline" size="sm">
+                  <User className="h-4 w-4 mr-2" />
+                  Admin
+                </Button>
+              </Link>
+              
+              <Link href="/inventory">
+                <Button variant="ghost" size="sm">
+                  <Package className="h-4 w-4 mr-2" />
+                  Inventory
+                </Button>
+              </Link>
+              
+              <Link href="/customers">
+                <Button variant="ghost" size="sm">
+                  <Users className="h-4 w-4 mr-2" />
+                  Customers
+                </Button>
+              </Link>
+            </div>
+            
+            {/* Mobile Admin Link */}
+            <Link href="/admin" className="sm:hidden">
               <Button variant="outline" size="sm">
-                <User className="h-4 w-4 mr-2" />
-                Admin
+                <User className="h-4 w-4" />
               </Button>
             </Link>
 
@@ -125,6 +148,32 @@ export default function Navbar() {
                   </span>
                 </Link>
               ))}
+              
+              {/* Mobile Admin Links */}
+              <Link href="/admin">
+                <span 
+                  className="block px-3 py-2 text-base font-medium cursor-pointer text-muted hover:text-accent"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Admin Dashboard
+                </span>
+              </Link>
+              <Link href="/inventory">
+                <span 
+                  className="block px-3 py-2 text-base font-medium cursor-pointer text-muted hover:text-accent"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Inventory
+                </span>
+              </Link>
+              <Link href="/customers">
+                <span 
+                  className="block px-3 py-2 text-base font-medium cursor-pointer text-muted hover:text-accent"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Customers
+                </span>
+              </Link>
               
               {/* Mobile search */}
               <div className="px-3 py-2">

@@ -162,32 +162,154 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Analytics endpoints
+  // Enhanced Analytics endpoints
   app.get("/api/analytics/stats", async (req, res) => {
     try {
       const products = await storage.getProducts();
       const orders = await storage.getOrders();
+      const customers = await storage.getCustomers();
+      const lowStockProducts = await storage.getLowStockProducts(10);
       
       const totalProducts = products.length;
-      const lowStockProducts = products.filter(p => p.stock < 10).length;
       const todayOrders = orders.filter(o => {
         const today = new Date();
-        const orderDate = o.createdAt ? new Date(o.createdAt) : new Date();
+        const orderDate = new Date(o.createdAt || new Date());
         return orderDate.toDateString() === today.toDateString();
       }).length;
       
-      const totalRevenue = orders.reduce((sum, order) => {
-        return sum + parseFloat(order.totalAmount);
-      }, 0);
+      const totalRevenue = orders
+        .filter(order => order.status === "completed")
+        .reduce((sum, order) => sum + parseFloat(order.totalAmount), 0);
+      
+      const pendingOrders = orders.filter(order => order.status === "pending").length;
+      const processingOrders = orders.filter(order => order.status === "processing").length;
+      const completedOrders = orders.filter(order => order.status === "completed").length;
+      
+      const monthlyRevenue = orders
+        .filter(order => {
+          const orderDate = new Date(order.createdAt);
+          const now = new Date();
+          return orderDate.getMonth() === now.getMonth() && 
+                 orderDate.getFullYear() === now.getFullYear() &&
+                 order.status === "completed";
+        })
+        .reduce((sum, order) => sum + parseFloat(order.totalAmount), 0);
 
       res.json({
         totalProducts,
-        lowStockProducts,
+        lowStockProducts: lowStockProducts.length,
+        totalOrders: orders.length,
+        totalCustomers: customers.length,
         todayOrders,
-        totalRevenue: totalRevenue.toFixed(2)
+        totalRevenue: totalRevenue.toFixed(2),
+        monthlyRevenue: monthlyRevenue.toFixed(2),
+        pendingOrders,
+        processingOrders,
+        completedOrders,
+        recentOrders: orders.slice(-5).reverse(),
+        lowStockItems: lowStockProducts.slice(0, 5)
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch analytics" });
+    }
+  });
+
+  // Enhanced order management endpoints
+  app.patch("/api/orders/:id/payment-status", async (req, res) => {
+    try {
+      const { paymentStatus } = req.body;
+      if (!paymentStatus) {
+        return res.status(400).json({ message: "Payment status is required" });
+      }
+      
+      const order = await storage.updateOrderPaymentStatus(req.params.id, paymentStatus);
+      if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+      
+      res.json(order);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update payment status" });
+    }
+  });
+
+  app.patch("/api/orders/:id/tracking", async (req, res) => {
+    try {
+      const { trackingNumber } = req.body;
+      if (!trackingNumber) {
+        return res.status(400).json({ message: "Tracking number is required" });
+      }
+      
+      const order = await storage.updateOrderTracking(req.params.id, trackingNumber);
+      if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+      
+      res.json(order);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update tracking number" });
+    }
+  });
+
+  // Customers endpoints
+  app.get("/api/customers", async (req, res) => {
+    try {
+      const customers = await storage.getCustomers();
+      res.json(customers);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch customers" });
+    }
+  });
+
+  app.get("/api/customers/:id", async (req, res) => {
+    try {
+      const customer = await storage.getCustomerById(req.params.id);
+      if (!customer) {
+        return res.status(404).json({ message: "Customer not found" });
+      }
+      res.json(customer);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch customer" });
+    }
+  });
+
+  // Inventory management endpoints
+  app.get("/api/inventory/logs", async (req, res) => {
+    try {
+      const { productId } = req.query;
+      const logs = await storage.getInventoryLogs(productId as string);
+      res.json(logs);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch inventory logs" });
+    }
+  });
+
+  app.get("/api/inventory/low-stock", async (req, res) => {
+    try {
+      const threshold = parseInt(req.query.threshold as string) || 10;
+      const products = await storage.getLowStockProducts(threshold);
+      res.json(products);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch low stock products" });
+    }
+  });
+
+  app.post("/api/inventory/update-stock", async (req, res) => {
+    try {
+      const { productId, newStock, reason } = req.body;
+      
+      if (!productId || newStock === undefined) {
+        return res.status(400).json({ message: "Product ID and new stock are required" });
+      }
+      
+      const success = await storage.updateProductStock(productId, parseInt(newStock), reason);
+      if (!success) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      
+      res.json({ message: "Stock updated successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update stock" });
     }
   });
 

@@ -39,9 +39,37 @@ export const orders = pgTable("orders", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   customerName: text("customer_name").notNull(),
   customerEmail: text("customer_email").notNull(),
+  customerPhone: text("customer_phone"),
+  shippingAddress: jsonb("shipping_address").$type<{street: string, city: string, emirate: string, zipCode: string}>(),
   totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
   status: text("status").notNull().default("pending"),
-  items: jsonb("items").$type<Array<{productId: string, quantity: number, price: number}>>().notNull(),
+  paymentStatus: text("payment_status").notNull().default("pending"),
+  trackingNumber: text("tracking_number"),
+  items: jsonb("items").$type<Array<{productId: string, quantity: number, price: number, productName: string}>>().notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const customers = pgTable("customers", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  phone: text("phone"),
+  address: jsonb("address").$type<{street: string, city: string, emirate: string, zipCode: string}>(),
+  totalOrders: integer("total_orders").notNull().default(0),
+  totalSpent: decimal("total_spent", { precision: 10, scale: 2 }).notNull().default("0.00"),
+  createdAt: timestamp("created_at").defaultNow(),
+  lastOrderAt: timestamp("last_order_at"),
+});
+
+export const inventoryLogs = pgTable("inventory_logs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  productId: varchar("product_id").notNull(),
+  action: text("action").notNull(), // 'add', 'remove', 'sale', 'adjustment'
+  quantity: integer("quantity").notNull(),
+  previousStock: integer("previous_stock").notNull(),
+  newStock: integer("new_stock").notNull(),
+  reason: text("reason"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -64,14 +92,29 @@ export const insertReviewSchema = createInsertSchema(reviews).omit({
 export const insertOrderSchema = createInsertSchema(orders).omit({
   id: true,
   createdAt: true,
+  updatedAt: true,
+});
+
+export const insertCustomerSchema = createInsertSchema(customers).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertInventoryLogSchema = createInsertSchema(inventoryLogs).omit({
+  id: true,
+  createdAt: true,
 });
 
 export type Category = typeof categories.$inferSelect;
 export type Product = typeof products.$inferSelect;
 export type Review = typeof reviews.$inferSelect;
 export type Order = typeof orders.$inferSelect;
+export type Customer = typeof customers.$inferSelect;
+export type InventoryLog = typeof inventoryLogs.$inferSelect;
 
 export type InsertCategory = z.infer<typeof insertCategorySchema>;
 export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type InsertReview = z.infer<typeof insertReviewSchema>;
 export type InsertOrder = z.infer<typeof insertOrderSchema>;
+export type InsertCustomer = z.infer<typeof insertCustomerSchema>;
+export type InsertInventoryLog = z.infer<typeof insertInventoryLogSchema>;

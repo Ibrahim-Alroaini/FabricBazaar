@@ -3,12 +3,24 @@ import {
   type Product, 
   type Review, 
   type Order,
+  type Customer,
+  type InventoryLog,
   type InsertCategory, 
   type InsertProduct, 
   type InsertReview, 
-  type InsertOrder 
+  type InsertOrder,
+  type InsertCustomer,
+  type InsertInventoryLog,
+  categories,
+  products,
+  reviews,
+  orders,
+  customers,
+  inventoryLogs
 } from "@shared/schema";
 import { randomUUID } from "crypto";
+import { db } from "./db";
+import { eq, ilike, and, desc, sql, count } from "drizzle-orm";
 
 export interface IStorage {
   // Categories
@@ -33,6 +45,305 @@ export interface IStorage {
   getOrderById(id: string): Promise<Order | undefined>;
   createOrder(order: InsertOrder): Promise<Order>;
   updateOrderStatus(id: string, status: string): Promise<Order | undefined>;
+  updateOrderPaymentStatus(id: string, paymentStatus: string): Promise<Order | undefined>;
+  updateOrderTracking(id: string, trackingNumber: string): Promise<Order | undefined>;
+  
+  // Customers
+  getCustomers(): Promise<Customer[]>;
+  getCustomerById(id: string): Promise<Customer | undefined>;
+  getCustomerByEmail(email: string): Promise<Customer | undefined>;
+  createCustomer(customer: InsertCustomer): Promise<Customer>;
+  updateCustomer(id: string, customer: Partial<InsertCustomer>): Promise<Customer | undefined>;
+  
+  // Inventory
+  getInventoryLogs(productId?: string): Promise<InventoryLog[]>;
+  createInventoryLog(log: InsertInventoryLog): Promise<InventoryLog>;
+  getLowStockProducts(threshold?: number): Promise<Product[]>;
+  updateProductStock(id: string, newStock: number, reason?: string): Promise<boolean>;
+}
+
+export class DatabaseStorage implements IStorage {
+  async getCategories(): Promise<Category[]> {
+    return await db.select().from(categories);
+  }
+
+  async getCategoryById(id: string): Promise<Category | undefined> {
+    const [category] = await db.select().from(categories).where(eq(categories.id, id));
+    return category || undefined;
+  }
+
+  async createCategory(insertCategory: InsertCategory): Promise<Category> {
+    const [category] = await db
+      .insert(categories)
+      .values(insertCategory)
+      .returning();
+    return category;
+  }
+
+  async getProducts(categoryId?: string): Promise<Product[]> {
+    if (categoryId) {
+      return await db
+        .select()
+        .from(products)
+        .where(and(eq(products.categoryId, categoryId), eq(products.isActive, true)))
+        .orderBy(desc(products.createdAt));
+    }
+    return await db
+      .select()
+      .from(products)
+      .where(eq(products.isActive, true))
+      .orderBy(desc(products.createdAt));
+  }
+
+  async getProductById(id: string): Promise<Product | undefined> {
+    const [product] = await db.select().from(products).where(eq(products.id, id));
+    return product || undefined;
+  }
+
+  async createProduct(insertProduct: InsertProduct): Promise<Product> {
+    const barcode = this.generateBarcode();
+    const productData = {
+      name: insertProduct.name,
+      description: insertProduct.description,
+      price: insertProduct.price,
+      categoryId: insertProduct.categoryId,
+      stock: insertProduct.stock || 0,
+      specifications: insertProduct.specifications || {},
+      isActive: insertProduct.isActive !== undefined ? insertProduct.isActive : true,
+      images: insertProduct.images || [],
+      barcode
+    } as any;
+    
+    const [product] = await db
+      .insert(products)
+      .values(productData)
+      .returning();
+    return product;
+  }
+
+  async updateProduct(id: string, updateData: Partial<InsertProduct>): Promise<Product | undefined> {
+    const updateFields: any = {
+      updatedAt: new Date()
+    };
+    
+    if (updateData.name !== undefined) updateFields.name = updateData.name;
+    if (updateData.description !== undefined) updateFields.description = updateData.description;
+    if (updateData.price !== undefined) updateFields.price = updateData.price;
+    if (updateData.categoryId !== undefined) updateFields.categoryId = updateData.categoryId;
+    if (updateData.stock !== undefined) updateFields.stock = updateData.stock;
+    if (updateData.specifications !== undefined) updateFields.specifications = updateData.specifications;
+    if (updateData.isActive !== undefined) updateFields.isActive = updateData.isActive;
+    if (updateData.images !== undefined) updateFields.images = updateData.images;
+    
+    const [product] = await db
+      .update(products)
+      .set(updateFields)
+      .where(eq(products.id, id))
+      .returning();
+    return product || undefined;
+  }
+
+  async deleteProduct(id: string): Promise<boolean> {
+    const result = await db.delete(products).where(eq(products.id, id));
+    return (result.rowCount || 0) > 0;
+  }
+
+  async searchProducts(query: string): Promise<Product[]> {
+    return await db
+      .select()
+      .from(products)
+      .where(
+        and(
+          eq(products.isActive, true),
+          ilike(products.name, `%${query}%`)
+        )
+      )
+      .orderBy(desc(products.createdAt));
+  }
+
+  async getReviewsByProductId(productId: string): Promise<Review[]> {
+    return await db
+      .select()
+      .from(reviews)
+      .where(eq(reviews.productId, productId))
+      .orderBy(desc(reviews.createdAt));
+  }
+
+  async createReview(insertReview: InsertReview): Promise<Review> {
+    const [review] = await db
+      .insert(reviews)
+      .values({
+        ...insertReview,
+        isVerified: insertReview.isVerified || false
+      })
+      .returning();
+    return review;
+  }
+
+  async getOrders(): Promise<Order[]> {
+    return await db
+      .select()
+      .from(orders)
+      .orderBy(desc(orders.createdAt));
+  }
+
+  async getOrderById(id: string): Promise<Order | undefined> {
+    const [order] = await db.select().from(orders).where(eq(orders.id, id));
+    return order || undefined;
+  }
+
+  async createOrder(insertOrder: InsertOrder): Promise<Order> {
+    const orderData = {
+      customerName: insertOrder.customerName,
+      customerEmail: insertOrder.customerEmail,
+      totalAmount: insertOrder.totalAmount,
+      items: insertOrder.items,
+      status: "pending"
+    } as any;
+    
+    const [order] = await db
+      .insert(orders)
+      .values(orderData)
+      .returning();
+    return order;
+  }
+
+  async updateOrderStatus(id: string, status: string): Promise<Order | undefined> {
+    const [order] = await db
+      .update(orders)
+      .set({ status, updatedAt: new Date() })
+      .where(eq(orders.id, id))
+      .returning();
+    return order || undefined;
+  }
+
+  async updateOrderPaymentStatus(id: string, paymentStatus: string): Promise<Order | undefined> {
+    const [order] = await db
+      .update(orders)
+      .set({ paymentStatus, updatedAt: new Date() })
+      .where(eq(orders.id, id))
+      .returning();
+    return order || undefined;
+  }
+
+  async updateOrderTracking(id: string, trackingNumber: string): Promise<Order | undefined> {
+    const [order] = await db
+      .update(orders)
+      .set({ trackingNumber, updatedAt: new Date() })
+      .where(eq(orders.id, id))
+      .returning();
+    return order || undefined;
+  }
+
+  async getCustomers(): Promise<Customer[]> {
+    return await db
+      .select()
+      .from(customers)
+      .orderBy(desc(customers.lastOrderAt));
+  }
+
+  async getCustomerById(id: string): Promise<Customer | undefined> {
+    const [customer] = await db.select().from(customers).where(eq(customers.id, id));
+    return customer || undefined;
+  }
+
+  async getCustomerByEmail(email: string): Promise<Customer | undefined> {
+    const [customer] = await db.select().from(customers).where(eq(customers.email, email));
+    return customer || undefined;
+  }
+
+  async createCustomer(insertCustomer: InsertCustomer): Promise<Customer> {
+    const [customer] = await db
+      .insert(customers)
+      .values(insertCustomer)
+      .returning();
+    return customer;
+  }
+
+  async updateCustomer(id: string, updateData: Partial<InsertCustomer>): Promise<Customer | undefined> {
+    const [customer] = await db
+      .update(customers)
+      .set(updateData)
+      .where(eq(customers.id, id))
+      .returning();
+    return customer || undefined;
+  }
+
+  async getInventoryLogs(productId?: string): Promise<InventoryLog[]> {
+    if (productId) {
+      return await db
+        .select()
+        .from(inventoryLogs)
+        .where(eq(inventoryLogs.productId, productId))
+        .orderBy(desc(inventoryLogs.createdAt));
+    }
+    return await db
+      .select()
+      .from(inventoryLogs)
+      .orderBy(desc(inventoryLogs.createdAt))
+      .limit(100);
+  }
+
+  async createInventoryLog(insertLog: InsertInventoryLog): Promise<InventoryLog> {
+    const [log] = await db
+      .insert(inventoryLogs)
+      .values(insertLog)
+      .returning();
+    return log;
+  }
+
+  async getLowStockProducts(threshold: number = 10): Promise<Product[]> {
+    return await db
+      .select()
+      .from(products)
+      .where(and(eq(products.isActive, true), sql`${products.stock} <= ${threshold}`))
+      .orderBy(products.stock);
+  }
+
+  async updateProductStock(id: string, newStock: number, reason?: string): Promise<boolean> {
+    const product = await this.getProductById(id);
+    if (!product) return false;
+
+    const previousStock = product.stock;
+    const quantity = newStock - previousStock;
+    const action = quantity > 0 ? 'add' : quantity < 0 ? 'remove' : 'adjustment';
+
+    // Update product stock
+    const [updatedProduct] = await db
+      .update(products)
+      .set({ stock: newStock, updatedAt: new Date() })
+      .where(eq(products.id, id))
+      .returning();
+
+    // Log the inventory change
+    if (updatedProduct) {
+      await this.createInventoryLog({
+        productId: id,
+        action,
+        quantity: Math.abs(quantity),
+        previousStock,
+        newStock,
+        reason: reason || `Stock ${action}`
+      });
+      return true;
+    }
+
+    return false;
+  }
+
+  private generateBarcode(): string {
+    const patterns = [
+      "||||| |||| ||||",
+      "|||| ||| |||||",
+      "||| |||| ||||||",
+      "|||| ||| |||| ||",
+      "|| |||| ||||| |",
+      "||| || ||| ||||",
+      "|||| || ||| |||",
+      "|| ||| |||| |||"
+    ];
+    return patterns[Math.floor(Math.random() * patterns.length)];
+  }
 }
 
 export class MemStorage implements IStorage {
@@ -323,4 +634,4 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
