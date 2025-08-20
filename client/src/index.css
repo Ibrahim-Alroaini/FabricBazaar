@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(30 8% 15%);
+  --card: hsl(35 16% 97%);
+  --card-foreground: hsl(30 8% 15%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(30 8% 15%);
+  --primary: hsl(210 20% 18%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(35 16% 97%);
+  --secondary-foreground: hsl(30 8% 15%);
+  --muted: hsl(210 6% 46%);
+  --muted-foreground: hsl(210 6% 46%);
+  --accent: hsl(42 93% 51%);
+  --accent-foreground: hsl(0 0% 100%);
+  --destructive: hsl(356 91% 54%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(214 20% 91%);
+  --input: hsl(35 16% 97%);
+  --ring: hsl(42 93% 51%);
+  --cream: hsl(35 60% 95%);
+  --chart-1: hsl(210 20% 18%);
+  --chart-2: hsl(160 100% 36%);
+  --chart-3: hsl(42 93% 51%);
+  --chart-4: hsl(147 79% 42%);
+  --chart-5: hsl(341 75% 51%);
+  --sidebar: hsl(35 16% 97%);
+  --sidebar-foreground: hsl(30 8% 15%);
+  --sidebar-primary: hsl(210 20% 18%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(35 16% 97%);
+  --sidebar-accent-foreground: hsl(210 20% 18%);
+  --sidebar-border: hsl(214 20% 91%);
+  --sidebar-ring: hsl(42 93% 51%);
+  --font-sans: 'Open Sans', sans-serif;
+  --font-serif: 'Georgia', serif;
+  --font-mono: 'Menlo', monospace;
+  --font-inter: 'Inter', sans-serif;
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: hsl(210 20% 8%);
+  --foreground: hsl(210 6% 91%);
+  --card: hsl(210 20% 10%);
+  --card-foreground: hsl(210 6% 91%);
+  --popover: hsl(210 20% 8%);
+  --popover-foreground: hsl(210 6% 91%);
+  --primary: hsl(42 93% 51%);
+  --primary-foreground: hsl(210 20% 8%);
+  --secondary: hsl(210 20% 15%);
+  --secondary-foreground: hsl(210 6% 91%);
+  --muted: hsl(210 6% 25%);
+  --muted-foreground: hsl(210 6% 60%);
+  --accent: hsl(42 93% 51%);
+  --accent-foreground: hsl(210 20% 8%);
+  --destructive: hsl(356 91% 54%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(210 20% 20%);
+  --input: hsl(210 20% 15%);
+  --ring: hsl(42 93% 51%);
+  --cream: hsl(210 20% 12%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-inter);
+  }
+}
+
+@layer components {
+  .fabric-card {
+    @apply bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden;
+  }
+
+  .fabric-card-image {
+    @apply w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300;
+  }
+
+  .barcode-display {
+    @apply bg-white p-2 rounded border-2 border-dashed border-gray-300 font-mono text-xs text-center;
+  }
+
+  .aed-price {
+    @apply text-primary font-bold;
+  }
+
+  .hero-overlay {
+    @apply absolute inset-0 bg-black bg-opacity-40;
+  }
+
+  .admin-stats-card {
+    @apply bg-white rounded-xl shadow-md p-6 flex items-center;
+  }
+}
+
+@layer utilities {
+  .font-inter {
+    font-family: var(--font-inter);
+  }
+}
