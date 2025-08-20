@@ -453,144 +453,248 @@ export default function Admin() {
                 <AnalyticsDashboard />
               </TabsContent>
 
-              <TabsContent value="orders" className="space-y-6">
+              <TabsContent value="orders" className="space-y-8">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-medium">Order Management</h3>
-                  <div className="flex space-x-2">
-                    <Button variant="outline" size="sm">
+                  <div>
+                    <h3 className="text-2xl font-inter font-bold text-luxury-copper">Order Management</h3>
+                    <p className="text-muted-foreground mt-1">Monitor and manage customer orders</p>
+                  </div>
+                  <div className="flex space-x-3">
+                    <Button variant="outline" className="border-luxury-gold text-luxury-copper hover:bg-luxury-gold/10">
                       <Download className="h-4 w-4 mr-2" />
                       Export Orders
+                    </Button>
+                    <Button className="premium-button">
+                      <Activity className="h-4 w-4 mr-2" />
+                      Live Orders
                     </Button>
                   </div>
                 </div>
                 
-                <div className="overflow-x-auto">
-                  <table className="w-full table-auto">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                          Order ID
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                          Customer
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                          Amount
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                          Status
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                          Payment
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                          Date
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {orders?.map((order) => (
-                        <tr key={order.id}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            #{order.id.slice(0, 8)}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            <div>
-                              <div>{order.customerName}</div>
-                              <div className="text-xs text-gray-500">{order.customerEmail}</div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {formatAED(parseFloat(order.totalAmount))}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <Select 
-                              value={orderStatusUpdate.orderId === order.id ? orderStatusUpdate.status : order.status}
-                              onValueChange={(value) => {
-                                setOrderStatusUpdate({ orderId: order.id, status: value });
-                                updateOrderStatusMutation.mutate({ orderId: order.id, status: value });
-                              }}
-                            >
-                              <SelectTrigger className="w-32">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="pending">Pending</SelectItem>
-                                <SelectItem value="processing">Processing</SelectItem>
-                                <SelectItem value="shipped">Shipped</SelectItem>
-                                <SelectItem value="completed">Completed</SelectItem>
-                                <SelectItem value="cancelled">Cancelled</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <Badge 
-                              variant={order.paymentStatus === 'paid' ? 'default' : 'secondary'}
-                            >
-                              {order.paymentStatus || 'pending'}
-                            </Badge>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-AE') : 'N/A'}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button variant="ghost" size="sm">
-                                  <Eye className="h-4 w-4" />
+                <Card className="border-luxury-gold/20 shadow-lg">
+                  <CardContent className="p-0">
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-gradient-to-r from-luxury-gold/10 to-luxury-copper/10">
+                          <tr className="border-b border-luxury-gold/20">
+                            <th className="px-6 py-4 text-left text-sm font-bold text-luxury-copper uppercase tracking-wider">
+                              Order Details
+                            </th>
+                            <th className="px-6 py-4 text-left text-sm font-bold text-luxury-copper uppercase tracking-wider">
+                              Customer Info
+                            </th>
+                            <th className="px-6 py-4 text-left text-sm font-bold text-luxury-copper uppercase tracking-wider">
+                              Items & Amount
+                            </th>
+                            <th className="px-6 py-4 text-left text-sm font-bold text-luxury-copper uppercase tracking-wider">
+                              Status
+                            </th>
+                            <th className="px-6 py-4 text-left text-sm font-bold text-luxury-copper uppercase tracking-wider">
+                              Payment
+                            </th>
+                            <th className="px-6 py-4 text-center text-sm font-bold text-luxury-copper uppercase tracking-wider">
+                              Actions
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-luxury-gold/10">
+                          {orders?.map((order) => (
+                            <tr key={order.id} className="hover:bg-luxury-gold/5 transition-colors">
+                              <td className="px-6 py-6">
+                                <div className="flex flex-col">
+                                  <span className="text-lg font-inter font-bold text-luxury-copper">
+                                    #{order.id.slice(0, 8)}
+                                  </span>
+                                  <span className="text-sm text-muted-foreground">
+                                    {order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-AE') : 'N/A'}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="px-6 py-6">
+                                <div className="flex flex-col">
+                                  <span className="font-semibold text-foreground">{order.customerName}</span>
+                                  <span className="text-sm text-muted-foreground">{order.customerEmail}</span>
+                                  <span className="text-xs text-muted-foreground mt-1">
+                                    {typeof order.shippingAddress === 'object' 
+                                      ? `${order.shippingAddress.city}, ${order.shippingAddress.emirate}`
+                                      : order.shippingAddress
+                                    }
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="px-6 py-6">
+                                <div className="flex flex-col">
+                                  <span className="text-xs text-muted-foreground mb-1">
+                                    {order.items ? `${order.items.length} items` : '0 items'}
+                                  </span>
+                                  <span className="text-xl font-inter font-bold aed-price">
+                                    {formatAED(parseFloat(order.totalAmount))}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="px-6 py-6">
+                                <Select 
+                                  value={orderStatusUpdate.orderId === order.id ? orderStatusUpdate.status : order.status}
+                                  onValueChange={(value) => {
+                                    setOrderStatusUpdate({ orderId: order.id, status: value });
+                                    updateOrderStatusMutation.mutate({ orderId: order.id, status: value });
+                                  }}
+                                >
+                                  <SelectTrigger className="w-40 border-luxury-gold/30">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="pending">Pending</SelectItem>
+                                    <SelectItem value="processing">Processing</SelectItem>
+                                    <SelectItem value="shipped">Shipped</SelectItem>
+                                    <SelectItem value="completed">Completed</SelectItem>
+                                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </td>
+                              <td className="px-6 py-6">
+                                <Badge 
+                                  className={`px-3 py-1 font-semibold ${
+                                    order.paymentStatus === 'paid' 
+                                      ? 'bg-luxury-emerald text-white' 
+                                      : 'bg-muted text-muted-foreground'
+                                  }`}
+                                >
+                                  {order.paymentStatus || 'pending'}
+                                </Badge>
+                              </td>
+                              <td className="px-6 py-6 text-center">
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <Button 
+                                      variant="outline" 
+                                      size="sm" 
+                                      className="border-luxury-gold text-luxury-copper hover:bg-luxury-gold/10"
+                                    >
+                                      <Eye className="h-4 w-4 mr-2" />
+                                      View Details
                                 </Button>
                               </DialogTrigger>
-                              <DialogContent className="max-w-2xl">
-                                <DialogHeader>
-                                  <DialogTitle>Order #{order.id.slice(0, 8)}</DialogTitle>
-                                </DialogHeader>
-                                <div className="space-y-4">
-                                  <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                      <h4 className="font-medium">Customer Information</h4>
-                                      <p className="text-sm">{order.customerName}</p>
-                                      <p className="text-sm text-gray-600">{order.customerEmail}</p>
-                                      <p className="text-sm text-gray-600">
-                                        {typeof order.shippingAddress === 'object' 
-                                          ? `${order.shippingAddress.street}, ${order.shippingAddress.city}, ${order.shippingAddress.emirate} ${order.shippingAddress.zipCode}`
-                                          : order.shippingAddress
-                                        }
-                                      </p>
-                                    </div>
-                                    <div>
-                                      <h4 className="font-medium">Order Details</h4>
-                                      <p className="text-sm">Status: {order.status}</p>
-                                      <p className="text-sm">Payment: {order.paymentStatus || 'pending'}</p>
-                                      <p className="text-sm">Total: {formatAED(parseFloat(order.totalAmount))}</p>
+                                  <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                                    <DialogHeader className="border-b border-luxury-gold/20 pb-4">
+                                      <DialogTitle className="text-2xl font-inter font-bold text-luxury-copper">
+                                        Order #{order.id.slice(0, 8)}
+                                      </DialogTitle>
+                                    </DialogHeader>
+                                    
+                                    <div className="space-y-6 py-6">
+                                      {/* Order Status Banner */}
+                                      <div className="bg-gradient-to-r from-luxury-gold/10 to-luxury-copper/10 rounded-lg p-4 border border-luxury-gold/20">
+                                        <div className="flex justify-between items-center">
+                                          <div>
+                                            <p className="text-sm text-muted-foreground">Order Status</p>
+                                            <p className="text-xl font-bold text-luxury-copper capitalize">{order.status}</p>
+                                          </div>
+                                          <div>
+                                            <p className="text-sm text-muted-foreground">Payment Status</p>
+                                            <Badge className={`px-3 py-1 font-semibold ${order.paymentStatus === 'paid' ? 'bg-luxury-emerald text-white' : 'bg-muted text-muted-foreground'}`}>
+                                              {order.paymentStatus || 'pending'}
+                                            </Badge>
+                                          </div>
+                                          <div>
+                                            <p className="text-sm text-muted-foreground">Total Amount</p>
+                                            <p className="text-xl font-bold aed-price">{formatAED(parseFloat(order.totalAmount))}</p>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      {/* Customer & Shipping Info */}
+                                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <Card className="border-luxury-gold/30">
+                                          <CardHeader>
+                                            <CardTitle className="text-luxury-copper">Customer Information</CardTitle>
+                                          </CardHeader>
+                                          <CardContent className="space-y-3">
+                                            <div>
+                                              <p className="text-sm text-muted-foreground">Name</p>
+                                              <p className="font-semibold">{order.customerName}</p>
+                                            </div>
+                                            <div>
+                                              <p className="text-sm text-muted-foreground">Email</p>
+                                              <p className="font-mono text-sm">{order.customerEmail}</p>
+                                            </div>
+                                          </CardContent>
+                                        </Card>
+
+                                        <Card className="border-luxury-gold/30">
+                                          <CardHeader>
+                                            <CardTitle className="text-luxury-copper">Shipping Address</CardTitle>
+                                          </CardHeader>
+                                          <CardContent>
+                                            <div className="text-sm leading-relaxed">
+                                              {typeof order.shippingAddress === 'object' ? (
+                                                <div className="space-y-1">
+                                                  <p className="font-semibold">{order.shippingAddress.street}</p>
+                                                  <p>{order.shippingAddress.city}, {order.shippingAddress.emirate}</p>
+                                                  <p>{order.shippingAddress.zipCode}</p>
+                                                </div>
+                                              ) : (
+                                                <p>{order.shippingAddress}</p>
+                                              )}
+                                            </div>
+                                          </CardContent>
+                                        </Card>
+                                      </div>
+
+                                      {/* Order Items */}
+                                      <Card className="border-luxury-gold/30">
+                                        <CardHeader>
+                                          <CardTitle className="text-luxury-copper">Order Items</CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                          <div className="space-y-3">
+                                            {order.items?.map((item: any, index: number) => (
+                                              <div key={index} className="flex justify-between items-center p-4 bg-luxury-gold/5 rounded-lg border border-luxury-gold/20">
+                                                <div className="flex-1">
+                                                  <p className="font-semibold text-foreground">{item.productId}</p>
+                                                  <p className="text-sm text-muted-foreground">Product ID: {item.productId}</p>
+                                                </div>
+                                                <div className="text-center px-4">
+                                                  <p className="text-sm text-muted-foreground">Quantity</p>
+                                                  <p className="font-bold text-lg">{item.quantity || 1}</p>
+                                                </div>
+                                                <div className="text-right">
+                                                  <p className="text-sm text-muted-foreground">Price</p>
+                                                  <p className="font-bold aed-price">{formatAED(parseFloat(item.price || '0'))}</p>
+                                                </div>
+                                              </div>
+                                            )) || (
+                                              <p className="text-muted-foreground text-center py-4">No items found</p>
+                                            )}
+                                          </div>
+                                        </CardContent>
+                                      </Card>
+
+                                      {/* Order Timeline */}
                                       {order.trackingNumber && (
-                                        <p className="text-sm">Tracking: {order.trackingNumber}</p>
+                                        <Card className="border-luxury-gold/30">
+                                          <CardHeader>
+                                            <CardTitle className="text-luxury-copper">Tracking Information</CardTitle>
+                                          </CardHeader>
+                                          <CardContent>
+                                            <div className="bg-luxury-gold/10 p-3 rounded-lg">
+                                              <p className="font-mono text-lg font-bold text-luxury-copper">{order.trackingNumber}</p>
+                                              <p className="text-sm text-muted-foreground">Tracking Number</p>
+                                            </div>
+                                          </CardContent>
+                                        </Card>
                                       )}
                                     </div>
-                                  </div>
-                                  <div>
-                                    <h4 className="font-medium mb-2">Order Items</h4>
-                                    <div className="space-y-2">
-                                      {order.items.map((item: any, index: number) => (
-                                        <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                                          <span className="text-sm">{item.productId}</span>
-                                          <span className="text-sm">Qty: {item.quantity || 1}</span>
-                                          <span className="text-sm">{formatAED(parseFloat(item.price || '0'))}</span>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  </div>
-                                </div>
-                              </DialogContent>
-                            </Dialog>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                                  </DialogContent>
+                                </Dialog>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </CardContent>
+                </Card>
               </TabsContent>
               
               <TabsContent value="customers" className="space-y-6">
