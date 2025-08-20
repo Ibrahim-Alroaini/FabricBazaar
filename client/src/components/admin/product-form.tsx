@@ -11,21 +11,22 @@ import { apiRequest } from "@/lib/queryClient";
 import type { Category, InsertProduct } from "@shared/schema";
 
 interface ProductFormProps {
+  product?: any; // For editing existing products
   onClose: () => void;
 }
 
-export default function ProductForm({ onClose }: ProductFormProps) {
+export default function ProductForm({ product, onClose }: ProductFormProps) {
   const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    price: "",
-    categoryId: "",
-    stock: "",
+    name: product?.name || "",
+    description: product?.description || "",
+    price: product?.price || "",
+    categoryId: product?.categoryId || "",
+    stock: product?.stock?.toString() || "",
     specifications: {
-      material: "",
-      width: "",
-      weight: "",
-      care: ""
+      material: product?.specifications?.material || "",
+      width: product?.specifications?.width || "",
+      weight: product?.specifications?.weight || "",
+      care: product?.specifications?.care || ""
     }
   });
 
@@ -85,7 +86,7 @@ export default function ProductForm({ onClose }: ProductFormProps) {
     <Card>
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle>Add New Product</CardTitle>
+          <CardTitle>{product ? 'Edit Product' : 'Add New Product'}</CardTitle>
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="h-4 w-4" />
           </Button>
@@ -228,7 +229,7 @@ export default function ProductForm({ onClose }: ProductFormProps) {
               disabled={createProductMutation.isPending}
               className="bg-accent hover:bg-accent/90"
             >
-              {createProductMutation.isPending ? "Creating..." : "Generate Barcode & Save"}
+              {createProductMutation.isPending ? (product ? "Updating..." : "Creating...") : (product ? "Update Product" : "Generate Barcode & Save")}
             </Button>
           </div>
         </form>
