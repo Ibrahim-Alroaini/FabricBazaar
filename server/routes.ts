@@ -76,8 +76,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId: user.id,
         name: user.name,
         email: user.email,
-        phone: user.phone,
-        address: user.address
+        phone: user.phone || null,
+        address: user.address ? {
+          street: user.address.street || '',
+          city: user.address.city || '',
+          emirate: user.address.emirate || '',
+          zipCode: user.address.zipCode || ''
+        } : null
       });
       
       // Create session
@@ -495,7 +500,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const monthlyRevenue = orders
         .filter(order => {
-          const orderDate = new Date(order.createdAt);
+          const orderDate = new Date(order.createdAt || new Date());
           const now = new Date();
           return orderDate.getMonth() === now.getMonth() && 
                  orderDate.getFullYear() === now.getFullYear() &&
