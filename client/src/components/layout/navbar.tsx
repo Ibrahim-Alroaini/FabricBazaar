@@ -21,26 +21,27 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50">
+    <nav className="bg-card dark:bg-card shadow-xl sticky top-0 z-50 border-b border-luxury-gold/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-18">
           {/* Logo and Navigation */}
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Link href="/">
-                <h1 className="text-2xl font-inter font-bold text-primary cursor-pointer">
-                  <span className="text-accent">Alreef</span> Fabric
+                <h1 className="text-3xl font-inter font-bold cursor-pointer">
+                  <span className="luxury-gradient bg-clip-text text-transparent">Alreef</span> 
+                  <span className="text-foreground ml-2">Fabric</span>
                 </h1>
               </Link>
             </div>
-            <div className="hidden md:block ml-10">
-              <div className="flex items-baseline space-x-4">
+            <div className="hidden md:block ml-12">
+              <div className="flex items-baseline space-x-6">
                 {navigation.map((item) => (
                   <Link key={item.name} href={item.href}>
-                    <span className={`px-3 py-2 text-sm font-medium cursor-pointer ${
+                    <span className={`px-4 py-2 text-base font-semibold cursor-pointer transition-all duration-300 ${
                       location === item.href
-                        ? "text-accent"
-                        : "text-muted hover:text-accent"
+                        ? "text-luxury-copper border-b-2 border-luxury-copper"
+                        : "text-muted-foreground hover:text-luxury-copper"
                     }`}>
                       {item.name}
                     </span>
@@ -51,14 +52,14 @@ export default function Navbar() {
           </div>
 
           {/* Search Bar */}
-          <div className="flex-1 max-w-lg mx-4 hidden sm:block">
+          <div className="flex-1 max-w-lg mx-6 hidden sm:block">
             <div className="relative">
               <Input
                 type="text"
-                placeholder="Search fabrics..."
-                className="w-full pl-10 pr-4"
+                placeholder="Search luxury fabrics..."
+                className="w-full pl-12 pr-4 h-12 bg-input border-luxury-gold/30 focus:border-luxury-copper text-foreground"
               />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-luxury-copper h-5 w-5" />
             </div>
           </div>
 
@@ -70,7 +71,7 @@ export default function Navbar() {
             </Button>
 
             {/* Wishlist */}
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-luxury-copper transition-colors">
               <Heart className="h-5 w-5" />
             </Button>
 
@@ -78,9 +79,9 @@ export default function Navbar() {
             <CartDrawer />
 
             {/* Currency */}
-            <div className="hidden sm:flex items-center space-x-2 text-sm">
-              <Coins className="h-4 w-4 text-accent" />
-              <span className="font-medium text-primary">AED</span>
+            <div className="hidden sm:flex items-center space-x-2 text-sm bg-luxury-gold/10 px-3 py-2 rounded-full">
+              <Coins className="h-4 w-4 text-luxury-copper" />
+              <span className="font-bold text-luxury-copper">AED</span>
             </div>
 
             {/* User Account / Admin */}

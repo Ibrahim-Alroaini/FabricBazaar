@@ -62,6 +62,13 @@ export default {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        "luxury-gold": "var(--luxury-gold)",
+        "luxury-copper": "var(--luxury-copper)",
+        "luxury-emerald": "var(--luxury-emerald)",
+        "luxury-royal": "var(--luxury-royal)",
+        "luxury-navy": "var(--luxury-navy)",
+        "warm-beige": "var(--warm-beige)",
+        "soft-rose": "var(--soft-rose)",
       },
       fontFamily: {
         sans: ["var(--font-sans)"],

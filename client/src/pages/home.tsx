@@ -43,9 +43,9 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen fabric-texture-bg">
       {/* Hero Section */}
-      <section className="relative bg-primary text-white">
+      <section className="relative text-white">
         <div className="hero-overlay"></div>
         <div 
           style={{
@@ -53,46 +53,61 @@ export default function Home() {
             backgroundSize: "cover",
             backgroundPosition: "center"
           }}
-          className="h-96 flex items-center relative"
+          className="h-[28rem] flex items-center relative"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="max-w-2xl">
-              <h1 className="text-5xl font-inter font-bold mb-4">Premium Fabrics Collection</h1>
-              <p className="text-xl mb-8 text-gray-200">Discover luxury textiles for your creative projects</p>
-              <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                Shop Now
-              </Button>
+            <div className="max-w-3xl">
+              <h1 className="text-6xl font-inter font-bold mb-6 leading-tight">
+                Premium Fabrics Collection
+              </h1>
+              <p className="text-2xl mb-10 text-gray-100 leading-relaxed">
+                Discover luxury textiles crafted with excellence for your creative vision
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button size="lg" className="premium-button text-lg px-8 py-4">
+                  Explore Collection
+                </Button>
+                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-luxury-navy bg-transparent text-lg px-8 py-4">
+                  View Catalog
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Categories Section */}
-      <section className="py-16 bg-white">
+      <section className="py-20 bg-card dark:bg-card border-t border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-inter font-bold text-center mb-12">Browse by Category</h2>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-inter font-bold text-foreground mb-4">Browse by Category</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Explore our curated collection of premium fabrics, each category offering unique textures and qualities
+            </p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {categoriesLoading ? (
               Array.from({ length: 4 }).map((_, i) => (
-                <Skeleton key={i} className="h-48 rounded-xl" />
+                <Skeleton key={i} className="h-64 rounded-xl" />
               ))
             ) : (
               categories?.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id === selectedCategory ? "all" : category.id)}
-                  className="group cursor-pointer"
+                  className="group cursor-pointer transform hover:scale-105 transition-all duration-300"
                 >
-                  <div className="relative overflow-hidden rounded-xl shadow-lg">
+                  <div className="fabric-card-premium relative overflow-hidden h-64">
                     <img
                       src={category.imageUrl || ""}
                       alt={category.name}
-                      className="fabric-card-image"
+                      className="fabric-card-image h-full"
                     />
-                    <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-20 transition-opacity"></div>
-                    <div className="absolute bottom-4 left-4 text-white">
-                      <h3 className="text-xl font-semibold">{category.name}</h3>
-                      <p className="text-sm">{category.description}</p>
+                    <div className="absolute inset-0 bg-gradient-to-t from-luxury-navy/80 via-luxury-navy/30 to-transparent group-hover:from-luxury-copper/80 transition-all duration-300"></div>
+                    <div className="absolute bottom-6 left-6 text-white">
+                      <span className="category-badge mb-2 block w-fit">Premium</span>
+                      <h3 className="text-2xl font-inter font-bold mb-2">{category.name}</h3>
+                      <p className="text-sm text-gray-200 leading-relaxed">{category.description}</p>
                     </div>
                   </div>
                 </button>
@@ -103,24 +118,29 @@ export default function Home() {
       </section>
 
       {/* Featured Products Section */}
-      <section className="py-16 bg-cream">
+      <section className="py-20 bg-background dark:bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 gap-4">
-            <h2 className="text-3xl font-inter font-bold">Featured Products</h2>
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-16 gap-6">
+            <div>
+              <h2 className="text-4xl font-inter font-bold text-foreground mb-4">Featured Products</h2>
+              <p className="text-lg text-muted-foreground">
+                Handpicked selection of our finest fabrics
+              </p>
+            </div>
             
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 w-full lg:w-auto">
               <div className="relative flex-1 lg:w-80">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                 <Input
-                  placeholder="Search fabrics..."
+                  placeholder="Search luxury fabrics..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 border-luxury-gold/30 focus:border-luxury-copper bg-input text-foreground"
                 />
               </div>
               
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-full sm:w-48">
+                <SelectTrigger className="w-full sm:w-48 border-luxury-gold/30 focus:border-luxury-copper">
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
                 <SelectContent>
@@ -134,7 +154,7 @@ export default function Home() {
               </Select>
               
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-full sm:w-48">
+                <SelectTrigger className="w-full sm:w-48 border-luxury-gold/30 focus:border-luxury-copper">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

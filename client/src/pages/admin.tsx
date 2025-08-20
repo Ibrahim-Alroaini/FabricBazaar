@@ -93,26 +93,26 @@ export default function Admin() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen fabric-texture-bg">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Admin Header */}
-        <Card className="mb-8">
-          <CardContent className="pt-6">
+        <Card className="mb-10 border-2 border-luxury-gold/30 shadow-xl">
+          <CardContent className="pt-8">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-3xl font-inter font-bold text-primary">Admin Dashboard</h1>
-                <p className="text-muted-foreground">Manage your Alreef Fabric store</p>
+                <h1 className="text-4xl font-inter font-bold text-luxury-copper mb-2">Admin Dashboard</h1>
+                <p className="text-lg text-muted-foreground">Manage your luxury Alreef Fabric store</p>
               </div>
               <div className="flex space-x-4">
                 <Button
                   onClick={() => setShowProductForm(true)}
-                  className="bg-accent hover:bg-accent/90"
+                  className="premium-button"
                 >
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className="h-5 w-5 mr-2" />
                   Add Product
                 </Button>
-                <Button variant="outline">
-                  <Download className="h-4 w-4 mr-2" />
+                <Button variant="outline" className="border-luxury-gold text-luxury-copper hover:bg-luxury-gold/10">
+                  <Download className="h-5 w-5 mr-2" />
                   Export Data
                 </Button>
               </div>
@@ -121,16 +121,16 @@ export default function Admin() {
         </Card>
 
         {/* Enhanced Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-8">
-          <Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-10">
+          <Card className="admin-stats-card border-luxury-gold/30">
             <CardContent className="pt-6">
               <div className="flex items-center">
-                <div className="p-3 bg-blue-100 rounded-full">
-                  <Package className="h-6 w-6 text-blue-600" />
+                <div className="p-4 luxury-gradient rounded-xl shadow-lg">
+                  <Package className="h-7 w-7 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm text-muted-foreground">Total Products</p>
-                  <p className="text-2xl font-bold text-primary">
+                  <p className="text-sm font-medium text-muted-foreground">Total Products</p>
+                  <p className="text-3xl font-inter font-bold text-luxury-copper">
                     {statsLoading ? "..." : stats?.totalProducts || 0}
                   </p>
                 </div>
@@ -138,15 +138,15 @@ export default function Admin() {
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="admin-stats-card border-luxury-emerald/30">
             <CardContent className="pt-6">
               <div className="flex items-center">
-                <div className="p-3 bg-green-100 rounded-full">
-                  <ShoppingCart className="h-6 w-6 text-green-600" />
+                <div className="p-4 emerald-gradient rounded-xl shadow-lg">
+                  <ShoppingCart className="h-7 w-7 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm text-muted-foreground">Total Orders</p>
-                  <p className="text-2xl font-bold text-primary">
+                  <p className="text-sm font-medium text-muted-foreground">Total Orders</p>
+                  <p className="text-3xl font-inter font-bold text-luxury-emerald">
                     {statsLoading ? "..." : stats?.totalOrders || 0}
                   </p>
                 </div>
@@ -154,15 +154,15 @@ export default function Admin() {
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="admin-stats-card border-luxury-royal/30">
             <CardContent className="pt-6">
               <div className="flex items-center">
-                <div className="p-3 bg-purple-100 rounded-full">
-                  <Users className="h-6 w-6 text-purple-600" />
+                <div className="p-4 bg-luxury-royal rounded-xl shadow-lg">
+                  <Users className="h-7 w-7 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm text-muted-foreground">Customers</p>
-                  <p className="text-2xl font-bold text-primary">
+                  <p className="text-sm font-medium text-muted-foreground">Customers</p>
+                  <p className="text-3xl font-inter font-bold text-luxury-royal">
                     {statsLoading ? "..." : stats?.totalCustomers || 0}
                   </p>
                 </div>
@@ -553,7 +553,12 @@ export default function Admin() {
                                       <h4 className="font-medium">Customer Information</h4>
                                       <p className="text-sm">{order.customerName}</p>
                                       <p className="text-sm text-gray-600">{order.customerEmail}</p>
-                                      <p className="text-sm text-gray-600">{order.shippingAddress}</p>
+                                      <p className="text-sm text-gray-600">
+                                        {typeof order.shippingAddress === 'object' 
+                                          ? `${order.shippingAddress.street}, ${order.shippingAddress.city}, ${order.shippingAddress.emirate} ${order.shippingAddress.zipCode}`
+                                          : order.shippingAddress
+                                        }
+                                      </p>
                                     </div>
                                     <div>
                                       <h4 className="font-medium">Order Details</h4>
