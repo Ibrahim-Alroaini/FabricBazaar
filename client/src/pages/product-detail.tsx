@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRoute, useLocation } from "wouter";
-import { Star, Heart, Plus, Minus, Barcode, ArrowLeft } from "lucide-react";
+import { Star, Heart, Plus, Minus, Barcode, ArrowLeft, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,6 +12,9 @@ import ReviewSection from "@/components/review/review-section";
 import { formatAED } from "@/lib/currency";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { Link } from "wouter";
 import type { Product, Review } from "@shared/schema";
 
 export default function ProductDetail() {
@@ -20,6 +23,8 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { addToCart } = useCart();
+  const { isAuthenticated } = useAuth();
 
   const { data: product, isLoading: productLoading } = useQuery<Product>({
     queryKey: ["/api/products", params?.id],
@@ -31,18 +36,29 @@ export default function ProductDetail() {
     enabled: !!params?.id,
   });
 
-  const addToCartMutation = useMutation({
-    mutationFn: async () => {
-      // Mock cart functionality - in real app would add to cart
-      return { success: true };
-    },
-    onSuccess: () => {
+  const handleAddToCart = () => {
+    if (!isAuthenticated) {
       toast({
-        title: "Added to Cart",
-        description: `${quantity} meter(s) of ${product?.name} added to cart`,
+        title: "Authentication Required",
+        description: "Please sign in to add items to your cart.",
+        variant: "destructive"
       });
-    },
-  });
+      return;
+    }
+    
+    if (!product) return;
+    
+    if (product.stock === 0) {
+      toast({
+        title: "Out of Stock",
+        description: "This item is currently out of stock.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    addToCart(product.id, quantity);
+  };
 
   const averageRating = reviews?.length ? 
     reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length : 0;
@@ -194,17 +210,35 @@ export default function ProductDetail() {
               </div>
             </div>
 
-            <div className="flex space-x-4">
-              <Button
-                onClick={() => addToCartMutation.mutate()}
-                disabled={product.stock === 0 || addToCartMutation.isPending}
-                className="flex-1"
-              >
-                {addToCartMutation.isPending ? "Adding..." : "Add to Cart"}
-              </Button>
-              <Button variant="outline" size="icon">
-                <Heart className="h-4 w-4" />
-              </Button>
+            <div className="space-y-4">
+              <div className="flex space-x-4">
+                <Button
+                  onClick={handleAddToCart}
+                  disabled={product.stock === 0}
+                  className="flex-1"
+                >
+                  <ShoppingCart className="h-4 w-4 mr-2" />
+                  {!isAuthenticated 
+                    ? "Sign In to Add to Cart" 
+                    : product.stock === 0 
+                    ? "Out of Stock" 
+                    : "Add to Cart"}
+                </Button>
+                <Button variant="outline" size="icon">
+                  <Heart className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              {!isAuthenticated && (
+                <p className="text-sm text-gray-600">
+                  <Link to="/login" className="text-blue-600 hover:underline">
+                    Sign in
+                  </Link> or{' '}
+                  <Link to="/signup" className="text-blue-600 hover:underline">
+                    create an account
+                  </Link> to add items to your cart.
+                </p>
+              )}
             </div>
           </div>
         </div>

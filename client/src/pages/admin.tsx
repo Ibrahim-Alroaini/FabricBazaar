@@ -623,7 +623,7 @@ export default function Admin() {
                           {customer.address && (
                             <div>
                               <span className="text-sm text-gray-600">Location:</span>
-                              <p className="text-sm">{customer.address.city}, {customer.address.emirate}</p>
+                              <p className="text-sm">{customer.address?.city}, {customer.address?.emirate}</p>
                             </div>
                           )}
                         </div>

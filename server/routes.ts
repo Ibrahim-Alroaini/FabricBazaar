@@ -1,8 +1,10 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertProductSchema, insertReviewSchema, insertOrderSchema } from "@shared/schema";
+import { insertProductSchema, insertReviewSchema, insertOrderSchema, loginSchema, signupSchema, checkoutSchema } from "@shared/schema";
 import multer from "multer";
+import bcrypt from "bcryptjs";
+import { randomUUID } from "crypto";
 
 // Configure multer for image uploads
 const upload = multer({
@@ -11,6 +13,312 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Authentication middleware
+  const requireAuth = async (req: any, res: any, next: any) => {
+    const sessionId = req.headers.authorization?.replace('Bearer ', '');
+    if (!sessionId) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+    
+    try {
+      const session = await storage.getSessionById(sessionId);
+      if (!session || new Date() > new Date(session.expiresAt)) {
+        return res.status(401).json({ message: "Invalid or expired session" });
+      }
+      
+      const user = await storage.getUserById(session.userId);
+      if (!user) {
+        return res.status(401).json({ message: "User not found" });
+      }
+      
+      req.user = user;
+      req.session = session;
+      next();
+    } catch (error) {
+      res.status(401).json({ message: "Authentication failed" });
+    }
+  };
+  
+  const requireAdmin = async (req: any, res: any, next: any) => {
+    if (req.user?.role !== 'admin') {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    next();
+  };
+
+  // Authentication endpoints
+  app.post("/api/auth/signup", async (req, res) => {
+    try {
+      const userData = signupSchema.parse(req.body);
+      
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(userData.email);
+      if (existingUser) {
+        return res.status(400).json({ message: "User already exists with this email" });
+      }
+      
+      // Hash password
+      const hashedPassword = await bcrypt.hash(userData.password, 12);
+      
+      // Create user
+      const user = await storage.createUser({
+        name: userData.name,
+        email: userData.email,
+        password: hashedPassword,
+        role: "customer",
+        isVerified: false,
+        phone: userData.phone,
+        address: userData.address
+      });
+      
+      // Create customer record
+      await storage.createCustomer({
+        userId: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        address: user.address
+      });
+      
+      // Create session
+      const sessionId = randomUUID();
+      const expiresAt = new Date();
+      expiresAt.setHours(expiresAt.getHours() + 24); // 24 hour session
+      
+      await storage.createSession({
+        id: sessionId,
+        userId: user.id,
+        expiresAt
+      });
+      
+      // Return user data (without password) and session
+      const { password: _, ...userWithoutPassword } = user;
+      res.status(201).json({ 
+        user: userWithoutPassword, 
+        sessionId,
+        message: "Account created successfully" 
+      });
+    } catch (error) {
+      console.error('Signup error:', error);
+      res.status(400).json({ message: "Invalid signup data", error });
+    }
+  });
+  
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { email, password } = loginSchema.parse(req.body);
+      
+      // Get user by email
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      // Verify password
+      const isValidPassword = await bcrypt.compare(password, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      // Create session
+      const sessionId = randomUUID();
+      const expiresAt = new Date();
+      expiresAt.setHours(expiresAt.getHours() + 24); // 24 hour session
+      
+      await storage.createSession({
+        id: sessionId,
+        userId: user.id,
+        expiresAt
+      });
+      
+      // Return user data (without password) and session
+      const { password: _, ...userWithoutPassword } = user;
+      res.json({ 
+        user: userWithoutPassword, 
+        sessionId,
+        message: "Login successful" 
+      });
+    } catch (error) {
+      console.error('Login error:', error);
+      res.status(400).json({ message: "Invalid login data", error });
+    }
+  });
+  
+  app.post("/api/auth/logout", requireAuth, async (req: any, res) => {
+    try {
+      await storage.deleteSession(req.session.id);
+      res.json({ message: "Logout successful" });
+    } catch (error) {
+      res.status(500).json({ message: "Logout failed" });
+    }
+  });
+  
+  app.get("/api/auth/me", requireAuth, async (req: any, res) => {
+    const { password: _, ...userWithoutPassword } = req.user;
+    res.json({ user: userWithoutPassword });
+  });
+
+  // Shopping cart endpoints
+  app.get("/api/cart", requireAuth, async (req: any, res) => {
+    try {
+      const cart = await storage.getCartByUserId(req.user.id);
+      res.json(cart || { items: [], total: 0 });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch cart" });
+    }
+  });
+  
+  app.post("/api/cart/add", requireAuth, async (req: any, res) => {
+    try {
+      const { productId, quantity = 1 } = req.body;
+      
+      if (!productId) {
+        return res.status(400).json({ message: "Product ID is required" });
+      }
+      
+      const product = await storage.getProductById(productId);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      
+      if (product.stock < quantity) {
+        return res.status(400).json({ message: "Insufficient stock" });
+      }
+      
+      const cartItem = await storage.addToCart(req.user.id, {
+        productId,
+        quantity,
+        priceAtTime: product.price
+      });
+      
+      res.status(201).json(cartItem);
+    } catch (error) {
+      console.error('Add to cart error:', error);
+      res.status(500).json({ message: "Failed to add item to cart" });
+    }
+  });
+  
+  app.put("/api/cart/update/:itemId", requireAuth, async (req: any, res) => {
+    try {
+      const { itemId } = req.params;
+      const { quantity } = req.body;
+      
+      if (quantity < 1) {
+        return res.status(400).json({ message: "Quantity must be at least 1" });
+      }
+      
+      const updatedItem = await storage.updateCartItem(itemId, quantity, req.user.id);
+      if (!updatedItem) {
+        return res.status(404).json({ message: "Cart item not found" });
+      }
+      
+      res.json(updatedItem);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update cart item" });
+    }
+  });
+  
+  app.delete("/api/cart/remove/:itemId", requireAuth, async (req: any, res) => {
+    try {
+      const { itemId } = req.params;
+      const success = await storage.removeFromCart(itemId, req.user.id);
+      
+      if (!success) {
+        return res.status(404).json({ message: "Cart item not found" });
+      }
+      
+      res.json({ message: "Item removed from cart" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to remove item from cart" });
+    }
+  });
+  
+  app.delete("/api/cart/clear", requireAuth, async (req: any, res) => {
+    try {
+      await storage.clearCart(req.user.id);
+      res.json({ message: "Cart cleared" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to clear cart" });
+    }
+  });
+
+  // Checkout endpoint
+  app.post("/api/checkout", requireAuth, async (req: any, res) => {
+    try {
+      const checkoutData = checkoutSchema.parse(req.body);
+      
+      // Get user's cart
+      const cart = await storage.getCartByUserId(req.user.id);
+      if (!cart || cart.items.length === 0) {
+        return res.status(400).json({ message: "Cart is empty" });
+      }
+      
+      // Calculate totals
+      const subtotal = cart.items.reduce((sum, item) => 
+        sum + (parseFloat(item.priceAtTime) * item.quantity), 0
+      );
+      const tax = subtotal * 0.05; // 5% VAT
+      const shipping = subtotal > 200 ? 0 : 25; // Free shipping over AED 200
+      const total = subtotal + tax + shipping;
+      
+      // Create order
+      const order = await storage.createOrder({
+        userId: req.user.id,
+        customerName: req.user.name,
+        customerEmail: req.user.email,
+        customerPhone: req.user.phone,
+        shippingAddress: checkoutData.shippingAddress,
+        billingAddress: checkoutData.billingAddress || checkoutData.shippingAddress,
+        subtotal: subtotal.toString(),
+        tax: tax.toString(),
+        shipping: shipping.toString(),
+        totalAmount: total.toString(),
+        paymentMethod: checkoutData.paymentMethod,
+        notes: checkoutData.notes,
+        items: cart.items.map(item => ({
+          productId: item.productId,
+          productName: item.productName || '',
+          quantity: item.quantity,
+          price: parseFloat(item.priceAtTime),
+          total: parseFloat(item.priceAtTime) * item.quantity
+        }))
+      });
+      
+      // Update product stock
+      for (const item of cart.items) {
+        const product = await storage.getProductById(item.productId);
+        if (product) {
+          await storage.updateProductStock(
+            item.productId, 
+            product.stock - item.quantity, 
+            `Order ${order.id}`
+          );
+        }
+      }
+      
+      // Clear cart
+      await storage.clearCart(req.user.id);
+      
+      // Update customer stats
+      const customer = await storage.getCustomerByEmail(req.user.email);
+      if (customer) {
+        await storage.updateCustomer(customer.id, {
+          totalOrders: customer.totalOrders + 1,
+          totalSpent: (parseFloat(customer.totalSpent) + total).toString(),
+          lastOrderAt: new Date()
+        });
+      }
+      
+      res.status(201).json({ 
+        order, 
+        message: "Order placed successfully" 
+      });
+    } catch (error) {
+      console.error('Checkout error:', error);
+      res.status(500).json({ message: "Failed to process order", error });
+    }
+  });
+
   // Categories
   app.get("/api/categories", async (req, res) => {
     try {
