@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alreef Fabric - Premium Fabric Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E293B',
+                        accent: '#F59E0B',
+                        cream: '#FEF7ED',
+                        muted: '#64748B'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'opensans': ['Open Sans', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-opensans">
+    <!-- Navigation -->
+    <!-- @COMPONENT: Navigation [logo, search, user menu, cart] -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-inter font-bold text-primary">
+                            <span class="text-accent">Alreef</span> Fabric
+                        </h1>
+                    </div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4">
+                            <a href="#" class="text-primary hover:text-accent px-3 py-2 text-sm font-medium">Home</a>
+                            <a href="#" class="text-muted hover:text-accent px-3 py-2 text-sm font-medium">Fabrics</a>
+                            <a href="#" class="text-muted hover:text-accent px-3 py-2 text-sm font-medium">Collections</a>
+                            <a href="#" class="text-muted hover:text-accent px-3 py-2 text-sm font-medium">About</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex-1 max-w-lg mx-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Search fabrics..." 
+                               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="text-muted hover:text-accent">
+                        <i class="fas fa-heart text-xl"></i>
+                    </button>
+                    <button class="text-muted hover:text-accent relative">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                    </button>
+                    <div class="flex items-center space-x-2 text-sm">
+                        <i class="fas fa-coins text-accent"></i>
+                        <span class="font-medium text-primary">AED</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: Navigation -->
+
+    <!-- Main Content Area -->
+    <div class="min-h-screen">
+        <!-- Tab Navigation -->
+        <div class="bg-white border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav class="flex space-x-8" id="main-tabs">
+                    <button class="tab-btn active py-4 px-1 border-b-2 border-accent text-accent font-medium text-sm" data-tab="store">
+                        <i class="fas fa-store mr-2"></i>Store Front
+                    </button>
+                    <button class="tab-btn py-4 px-1 border-b-2 border-transparent text-muted hover:text-primary font-medium text-sm" data-tab="product">
+                        <i class="fas fa-eye mr-2"></i>Product View
+                    </button>
+                    <button class="tab-btn py-4 px-1 border-b-2 border-transparent text-muted hover:text-primary font-medium text-sm" data-tab="admin">
+                        <i class="fas fa-cog mr-2"></i>Admin Panel
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Store Front Tab -->
+        <!-- @COMPONENT: StoreFront [hero, categories, featured products] -->
+        <div id="store-tab" class="tab-content">
+            <!-- Hero Section -->
+            <section class="relative bg-primary text-white">
+                <!-- Modern fabric store with luxury interior display -->
+                <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+                <div style="background-image: url('https://images.unsplash.com/photo-1586953208448-b95a79798f07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&h=800'); background-size: cover; background-position: center;" class="h-96 flex items-center relative">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                        <div class="max-w-2xl">
+                            <h1 class="text-5xl font-inter font-bold mb-4">Premium Fabrics Collection</h1>
+                            <p class="text-xl mb-8 text-gray-200">Discover luxury textiles for your creative projects</p>
+                            <button class="bg-accent hover:bg-yellow-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                                Shop Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categories -->
+            <section class="py-16 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-3xl font-inter font-bold text-center mb-12">Browse by Category</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <!-- Silk fabric texture with elegant draping -->
+                        <div class="group cursor-pointer">
+                            <div class="relative overflow-hidden rounded-xl shadow-lg">
+                                <img src="https://pixabay.com/get/ge6f02ef2d6d0b2a6888dcc3c92fc13e4a90fa4323b9c8f3b08ce2ad81a5bcd45c94e93b6ce9ae47e68d91b94b7d62eccb259bfa0180c5211966e23b014e58157_1280.jpg" 
+                                     alt="Silk Fabrics" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                                <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-20 transition-opacity"></div>
+                                <div class="absolute bottom-4 left-4 text-white">
+                                    <h3 class="text-xl font-semibold">Silk</h3>
+                                    <p class="text-sm">Premium silk fabrics</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cotton fabric rolls in various colors -->
+                        <div class="group cursor-pointer">
+                            <div class="relative overflow-hidden rounded-xl shadow-lg">
+                                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300" 
+                                     alt="Cotton Fabrics" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                                <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-20 transition-opacity"></div>
+                                <div class="absolute bottom-4 left-4 text-white">
+                                    <h3 class="text-xl font-semibold">Cotton</h3>
+                                    <p class="text-sm">Natural cotton blends</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Wool fabric texture showing natural fibers -->
+                        <div class="group cursor-pointer">
+                            <div class="relative overflow-hidden rounded-xl shadow-lg">
+                                <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300" 
+                                     alt="Wool Fabrics" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                                <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-20 transition-opacity"></div>
+                                <div class="absolute bottom-4 left-4 text-white">
+                                    <h3 class="text-xl font-semibold">Wool</h3>
+                                    <p class="text-sm">Cozy wool fabrics</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Synthetic fabric with modern patterns -->
+                        <div class="group cursor-pointer">
+                            <div class="relative overflow-hidden rounded-xl shadow-lg">
+                                <img src="https://images.unsplash.com/photo-1562157873-818bc0726f68?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300" 
+                                     alt="Synthetic Fabrics" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                                <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-20 transition-opacity"></div>
+                                <div class="absolute bottom-4 left-4 text-white">
+                                    <h3 class="text-xl font-semibold">Synthetic</h3>
+                                    <p class="text-sm">Modern synthetic blends</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Products -->
+            <section class="py-16 bg-cream">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between items-center mb-12">
+                        <h2 class="text-3xl font-inter font-bold">Featured Products</h2>
+                        <div class="flex space-x-4">
+                            <button class="text-muted hover:text-primary">
+                                <i class="fas fa-filter mr-2"></i>Filter
+                            </button>
+                            <select class="border border-gray-300 rounded-lg px-3 py-2">
+                                <option>Sort by Price</option>
+                                <option>Sort by Popularity</option>
+                                <option>Sort by Rating</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <!-- @MAP: products.map(product => ( -->
+                        
+                        <!-- Product Card 1 -->
+                        <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 group">
+                            <!-- Luxurious blue silk fabric with elegant draping -->
+                            <div class="relative overflow-hidden rounded-t-xl">
+                                <img src="https://pixabay.com/get/gb4a5cd721e57314c48e6762a94258cc04b18b5df85aa7ee72626b9e34707e27e737aa8ae03c48bc637ccef16e953c1e7e8bd6ce76346437b009ad4b4e6d51b84_1280.jpg" 
+                                     alt="Premium Blue Silk" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                                <div class="absolute top-3 right-3 bg-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <i class="fas fa-heart text-muted hover:text-red-500 cursor-pointer"></i>
+                                </div>
+                                <div class="absolute top-3 left-3 bg-accent text-white text-xs font-semibold px-2 py-1 rounded">
+                                    PREMIUM
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2" data-bind="product.name">Premium Blue Silk</h3>
+                                <div class="flex items-center mb-2">
+                                    <div class="flex text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <span class="text-muted text-sm ml-2">(24 reviews)</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-2xl font-bold text-primary">AED 45</span>
+                                        <span class="text-sm text-muted">/meter</span>
+                                    </div>
+                                    <div class="text-xs text-muted">
+                                        <i class="fas fa-barcode mr-1"></i>
+                                        #BL001
+                                    </div>
+                                </div>
+                                <button class="w-full mt-3 bg-primary hover:bg-slate-700 text-white py-2 rounded-lg transition-colors">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Card 2 -->
+                        <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 group">
+                            <!-- Red cotton fabric with natural texture -->
+                            <div class="relative overflow-hidden rounded-t-xl">
+                                <img src="https://pixabay.com/get/gfb069abbcd86e57751251522b7ce8e7b6c02c71d7e5c5efd06583ad38fe585eff18e908c974bef38971da3b67fe27924a9309881e9b483f0696fc80c56f4e479_1280.jpg" 
+                                     alt="Organic Red Cotton" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                                <div class="absolute top-3 right-3 bg-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <i class="fas fa-heart text-muted hover:text-red-500 cursor-pointer"></i>
+                                </div>
+                                <div class="absolute top-3 left-3 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                                    ORGANIC
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">Organic Red Cotton</h3>
+                                <div class="flex items-center mb-2">
+                                    <div class="flex text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <span class="text-muted text-sm ml-2">(18 reviews)</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-2xl font-bold text-primary">AED 32</span>
+                                        <span class="text-sm text-muted">/meter</span>
+                                    </div>
+                                    <div class="text-xs text-muted">
+                                        <i class="fas fa-barcode mr-1"></i>
+                                        #CT002
+                                    </div>
+                                </div>
+                                <button class="w-full mt-3 bg-primary hover:bg-slate-700 text-white py-2 rounded-lg transition-colors">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Card 3 -->
+                        <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 group">
+                            <!-- Green wool fabric with cozy texture -->
+                            <div class="relative overflow-hidden rounded-t-xl">
+                                <img src="https://pixabay.com/get/g0434b8087bcb5db4eb1227e161e6b1338a5483715f7497aa185dca80c9e547502d2b18891332ff79cae26c8dab6dcba7e5f75d98fc07053c3be65806ea2146dc_1280.jpg" 
+                                     alt="Merino Green Wool" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                                <div class="absolute top-3 right-3 bg-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <i class="fas fa-heart text-muted hover:text-red-500 cursor-pointer"></i>
+                                </div>
+                                <div class="absolute top-3 left-3 bg-blue-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                                    BESTSELLER
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">Merino Green Wool</h3>
+                                <div class="flex items-center mb-2">
+                                    <div class="flex text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <span class="text-muted text-sm ml-2">(31 reviews)</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-2xl font-bold text-primary">AED 58</span>
+                                        <span class="text-sm text-muted">/meter</span>
+                                    </div>
+                                    <div class="text-xs text-muted">
+                                        <i class="fas fa-barcode mr-1"></i>
+                                        #WL003
+                                    </div>
+                                </div>
+                                <button class="w-full mt-3 bg-primary hover:bg-slate-700 text-white py-2 rounded-lg transition-colors">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Card 4 -->
+                        <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 group">
+                            <!-- Patterned polyester fabric with modern design -->
+                            <div class="relative overflow-hidden rounded-t-xl">
+                                <img src="https://pixabay.com/get/g8644e058f79d6467cb7d5a0be4a94f215865f5d81034d004598f36eaa0661906601e7fd1f2d2d1c55c748c4b6313fd47edd1bc4b19ed76ff0cd421dfdc862494_1280.jpg" 
+                                     alt="Patterned Polyester" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                                <div class="absolute top-3 right-3 bg-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <i class="fas fa-heart text-muted hover:text-red-500 cursor-pointer"></i>
+                                </div>
+                                <div class="absolute top-3 left-3 bg-purple-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                                    NEW
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">Patterned Polyester</h3>
+                                <div class="flex items-center mb-2">
+                                    <div class="flex text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <span class="text-muted text-sm ml-2">(7 reviews)</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-2xl font-bold text-primary">AED 28</span>
+                                        <span class="text-sm text-muted">/meter</span>
+                                    </div>
+                                    <div class="text-xs text-muted">
+                                        <i class="fas fa-barcode mr-1"></i>
+                                        #PL004
+                                    </div>
+                                </div>
+                                <button class="w-full mt-3 bg-primary hover:bg-slate-700 text-white py-2 rounded-lg transition-colors">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- @END_COMPONENT: StoreFront -->
+
+        <!-- Product Detail View Tab -->
+        <!-- @COMPONENT: ProductDetail [images, details, reviews, barcode] -->
+        <div id="product-tab" class="tab-content hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Product Images -->
+                    <div class="space-y-4">
+                        <div class="aspect-square rounded-xl overflow-hidden shadow-lg">
+                            <!-- Premium silk fabric close-up showing intricate texture and sheen -->
+                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=800" 
+                                 alt="Premium Blue Silk Detail" class="w-full h-full object-cover">
+                        </div>
+                        <div class="grid grid-cols-4 gap-4">
+                            <!-- Fabric texture detail shot -->
+                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&h=200" 
+                                 alt="Texture Detail" class="aspect-square rounded-lg object-cover cursor-pointer border-2 border-accent">
+                            <!-- Fabric draping shot -->
+                            <img src="https://pixabay.com/get/g007f71724ebc99f8a00038e29dc4380250fb2f84ebf66d7cc425c19088fe3d22ce5d1605619ef53e05777cb6608486eae410303eda0b8f31b63af68dce64c4ae_1280.jpg" 
+                                 alt="Draping View" class="aspect-square rounded-lg object-cover cursor-pointer border-2 border-gray-200 hover:border-accent">
+                            <!-- Color comparison shot -->
+                            <img src="https://pixabay.com/get/g95864c8e5a84c43466ddbe2049e0f5e92f3658ae140ccb22a39349a155b169b0a44d5aceceb269a517164283a08ebf0bfa2a348ca534f70eb6836fb1ea4106a3_1280.jpg" 
+                                 alt="Color Variants" class="aspect-square rounded-lg object-cover cursor-pointer border-2 border-gray-200 hover:border-accent">
+                            <!-- Pattern close-up -->
+                            <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&h=200" 
+                                 alt="Pattern Detail" class="aspect-square rounded-lg object-cover cursor-pointer border-2 border-gray-200 hover:border-accent">
+                        </div>
+                    </div>
+
+                    <!-- Product Information -->
+                    <div class="space-y-6">
+                        <div>
+                            <h1 class="text-3xl font-inter font-bold mb-4">Premium Blue Silk</h1>
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div class="flex items-center">
+                                    <div class="flex text-yellow-400">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <span class="text-muted ml-2">(24 reviews)</span>
+                                </div>
+                                <div class="text-muted">|</div>
+                                <div class="flex items-center text-green-600">
+                                    <i class="fas fa-check-circle mr-1"></i>
+                                    <span class="text-sm">In Stock</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-4 mb-6">
+                                <span class="text-4xl font-bold text-primary">AED 45</span>
+                                <span class="text-muted">/meter</span>
+                                <span class="text-sm bg-accent text-white px-2 py-1 rounded">PREMIUM</span>
+                            </div>
+
+                            <!-- Barcode Display -->
+                            <div class="bg-gray-100 rounded-lg p-4 mb-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="font-semibold mb-1">Product Code</h3>
+                                        <p class="text-muted text-sm">Scan for quick reorder</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="bg-white p-2 rounded border-2 border-dashed border-gray-300">
+                                            <div class="font-mono text-xs">||||| |||| ||||</div>
+                                            <div class="text-xs text-center mt-1">#BL001-2024</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="text-muted mb-6">
+                                Luxurious blue silk fabric perfect for formal wear and special occasions. 
+                                Made from 100% natural silk with exceptional drape and sheen. 
+                                Ideal for dresses, blouses, and elegant garments.
+                            </p>
+
+                            <!-- Product Specifications -->
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div class="bg-cream rounded-lg p-4">
+                                    <h4 class="font-semibold mb-2">Material</h4>
+                                    <p class="text-sm text-muted">100% Natural Silk</p>
+                                </div>
+                                <div class="bg-cream rounded-lg p-4">
+                                    <h4 class="font-semibold mb-2">Width</h4>
+                                    <p class="text-sm text-muted">150cm</p>
+                                </div>
+                                <div class="bg-cream rounded-lg p-4">
+                                    <h4 class="font-semibold mb-2">Weight</h4>
+                                    <p class="text-sm text-muted">120 GSM</p>
+                                </div>
+                                <div class="bg-cream rounded-lg p-4">
+                                    <h4 class="font-semibold mb-2">Care</h4>
+                                    <p class="text-sm text-muted">Dry Clean Only</p>
+                                </div>
+                            </div>
+
+                            <!-- Quantity and Add to Cart -->
+                            <div class="flex items-center space-x-4 mb-6">
+                                <div class="flex items-center">
+                                    <label class="text-sm font-medium mr-3">Quantity (meters):</label>
+                                    <div class="flex items-center border border-gray-300 rounded">
+                                        <button class="px-3 py-2 hover:bg-gray-100">-</button>
+                                        <input type="number" value="1" min="1" class="w-16 text-center border-0 outline-none">
+                                        <button class="px-3 py-2 hover:bg-gray-100">+</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex space-x-4">
+                                <button class="flex-1 bg-primary hover:bg-slate-700 text-white py-3 rounded-lg font-semibold transition-colors">
+                                    Add to Cart
+                                </button>
+                                <button class="px-6 py-3 border border-primary text-primary hover:bg-primary hover:text-white rounded-lg transition-colors">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews Section -->
+                <div class="mt-16">
+                    <div class="border-b border-gray-200">
+                        <nav class="flex space-x-8">
+                            <button class="py-4 px-1 border-b-2 border-accent text-accent font-medium">Reviews (24)</button>
+                            <button class="py-4 px-1 border-b-2 border-transparent text-muted hover:text-primary">Specifications</button>
+                            <button class="py-4 px-1 border-b-2 border-transparent text-muted hover:text-primary">Shipping Info</button>
+                        </nav>
+                    </div>
+
+                    <div class="py-8">
+                        <!-- Review Summary -->
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                            <div class="bg-cream rounded-xl p-6 text-center">
+                                <div class="text-4xl font-bold text-primary mb-2">4.8</div>
+                                <div class="flex justify-center text-yellow-400 mb-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="text-muted text-sm">Based on 24 reviews</p>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <span class="text-sm w-8">5★</span>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mx-3">
+                                        <div class="bg-accent h-2 rounded-full" style="width: 75%"></div>
+                                    </div>
+                                    <span class="text-sm text-muted">18</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-sm w-8">4★</span>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mx-3">
+                                        <div class="bg-accent h-2 rounded-full" style="width: 20%"></div>
+                                    </div>
+                                    <span class="text-sm text-muted">5</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-sm w-8">3★</span>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mx-3">
+                                        <div class="bg-accent h-2 rounded-full" style="width: 4%"></div>
+                                    </div>
+                                    <span class="text-sm text-muted">1</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-sm w-8">2★</span>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mx-3">
+                                        <div class="bg-accent h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                    <span class="text-sm text-muted">0</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-sm w-8">1★</span>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mx-3">
+                                        <div class="bg-accent h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                    <span class="text-sm text-muted">0</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <button class="w-full bg-accent hover:bg-yellow-600 text-white py-3 rounded-lg font-semibold">
+                                    Write a Review
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Individual Reviews -->
+                        <div class="space-y-6">
+                            <!-- @MAP: reviews.map(review => ( -->
+                            <div class="border-b border-gray-200 pb-6">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-semibold">
+                                        F
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center space-x-2 mb-2">
+                                            <h4 class="font-semibold" data-bind="review.userName">Fatima Al-Zahra</h4>
+                                            <div class="flex text-yellow-400 text-sm">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <span class="text-muted text-sm">2 days ago</span>
+                                        </div>
+                                        <p class="text-muted mb-3">
+                                            Absolutely beautiful fabric! The quality is exceptional and the color is exactly as shown. 
+                                            Used it for my daughter's wedding dress and it was perfect. Fast delivery too.
+                                        </p>
+                                        <div class="flex items-center space-x-4 text-sm text-muted">
+                                            <button class="hover:text-primary">
+                                                <i class="fas fa-thumbs-up mr-1"></i>Helpful (3)
+                                            </button>
+                                            <button class="hover:text-primary">Reply</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="border-b border-gray-200 pb-6">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center text-white font-semibold">
+                                        M
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center space-x-2 mb-2">
+                                            <h4 class="font-semibold">Mohammed Hassan</h4>
+                                            <div class="flex text-yellow-400 text-sm">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <span class="text-muted text-sm">1 week ago</span>
+                                        </div>
+                                        <p class="text-muted mb-3">
+                                            Great quality silk. Bought this for tailoring traditional garments. 
+                                            The fabric handles very well and the finish is professional grade.
+                                        </p>
+                                        <div class="flex items-center space-x-4 text-sm text-muted">
+                                            <button class="hover:text-primary">
+                                                <i class="fas fa-thumbs-up mr-1"></i>Helpful (1)
+                                            </button>
+                                            <button class="hover:text-primary">Reply</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- @END_MAP )) -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: ProductDetail -->
+
+        <!-- Admin Panel Tab -->
+        <!-- @COMPONENT: AdminPanel [dashboard, product management, analytics] -->
+        <div id="admin-tab" class="tab-content hidden bg-gray-100 min-h-screen">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <!-- Admin Header -->
+                <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h1 class="text-3xl font-inter font-bold text-primary">Admin Dashboard</h1>
+                            <p class="text-muted">Manage your Alreef Fabric store</p>
+                        </div>
+                        <div class="flex space-x-4">
+                            <button class="bg-accent hover:bg-yellow-600 text-white px-4 py-2 rounded-lg">
+                                <i class="fas fa-plus mr-2"></i>Add Product
+                            </button>
+                            <button class="bg-primary hover:bg-slate-700 text-white px-4 py-2 rounded-lg">
+                                <i class="fas fa-download mr-2"></i>Export Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-blue-100 rounded-full">
+                                <i class="fas fa-box text-blue-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-muted text-sm">Total Products</p>
+                                <p class="text-2xl font-bold text-primary">1,247</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-green-100 rounded-full">
+                                <i class="fas fa-shopping-cart text-green-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-muted text-sm">Orders Today</p>
+                                <p class="text-2xl font-bold text-primary">43</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-yellow-100 rounded-full">
+                                <i class="fas fa-coins text-yellow-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-muted text-sm">Revenue (AED)</p>
+                                <p class="text-2xl font-bold text-primary">15,680</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-red-100 rounded-full">
+                                <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-muted text-sm">Low Stock</p>
+                                <p class="text-2xl font-bold text-primary">12</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Tabs -->
+                <div class="bg-white rounded-xl shadow-md">
+                    <div class="border-b border-gray-200">
+                        <nav class="flex space-x-8 px-6">
+                            <button class="admin-tab-btn active py-4 px-1 border-b-2 border-accent text-accent font-medium" data-admin-tab="products">
+                                <i class="fas fa-box mr-2"></i>Product Management
+                            </button>
+                            <button class="admin-tab-btn py-4 px-1 border-b-2 border-transparent text-muted hover:text-primary font-medium" data-admin-tab="analytics">
+                                <i class="fas fa-chart-bar mr-2"></i>Analytics
+                            </button>
+                            <button class="admin-tab-btn py-4 px-1 border-b-2 border-transparent text-muted hover:text-primary font-medium" data-admin-tab="orders">
+                                <i class="fas fa-receipt mr-2"></i>Orders
+                            </button>
+                        </nav>
+                    </div>
+
+                    <!-- Product Management Tab -->
+                    <div id="products-admin-tab" class="admin-tab-content p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-xl font-semibold">Product Management</h2>
+                            <div class="flex space-x-4">
+                                <input type="text" placeholder="Search products..." 
+                                       class="border border-gray-300 rounded-lg px-3 py-2">
+                                <select class="border border-gray-300 rounded-lg px-3 py-2">
+                                    <option>All Categories</option>
+                                    <option>Silk</option>
+                                    <option>Cotton</option>
+                                    <option>Wool</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Add/Edit Product Form -->
+                        <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                            <h3 class="text-lg font-semibold mb-4">Add New Product</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Product Name</label>
+                                    <input type="text" placeholder="Enter product name" 
+                                           class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Category</label>
+                                    <select class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                        <option>Select category</option>
+                                        <option>Silk</option>
+                                        <option>Cotton</option>
+                                        <option>Wool</option>
+                                        <option>Synthetic</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Price (AED)</label>
+                                    <input type="number" placeholder="0.00" 
+                                           class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Stock Quantity</label>
+                                    <input type="number" placeholder="0" 
+                                           class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium mb-2">Product Description</label>
+                                    <textarea rows="3" placeholder="Enter product description" 
+                                              class="w-full border border-gray-300 rounded-lg px-3 py-2"></textarea>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium mb-2">Product Images</label>
+                                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                                        <p class="text-gray-500">Drag and drop images here, or click to browse</p>
+                                        <button class="mt-2 bg-primary text-white px-4 py-2 rounded-lg text-sm">
+                                            Select Files
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-end mt-6 space-x-4">
+                                <button class="border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50">
+                                    Cancel
+                                </button>
+                                <button class="bg-accent hover:bg-yellow-600 text-white px-6 py-2 rounded-lg">
+                                    Generate Barcode & Save
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Products Table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-auto">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barcode</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <!-- @MAP: products.map(product => ( -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <!-- Premium fabric sample image -->
+                                                <img class="h-12 w-12 rounded-lg object-cover" 
+                                                     src="https://pixabay.com/get/ga04d9e89212ddcaa5145d5ca987e1ca34a361badf71af1bde7f37fbd29d6cafbb7586ac90f345b61acc0671a7fade6533dfab5e9f3e45971cb020abf1701acc8_1280.jpg" 
+                                                     alt="Premium Blue Silk">
+                                                <div class="ml-4">
+                                                    <div class="text-sm font-medium text-gray-900">Premium Blue Silk</div>
+                                                    <div class="text-sm text-gray-500">ID: BL001</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                Silk
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            AED 45.00
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            156 meters
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-mono bg-gray-100 px-2 py-1 rounded">
+                                                ||||| |||| ||||
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                                            <button class="text-accent hover:text-yellow-600">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-primary hover:text-slate-700">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-800">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <!-- Organic cotton fabric -->
+                                                <img class="h-12 w-12 rounded-lg object-cover" 
+                                                     src="https://pixabay.com/get/g3706e1c6e0b56a8e66e9cebc726918587fd8988691729570d18b1dafa843150a54b7460dcbb28445c1db81e80ab94bd2e193f6bb0246cd9d5c7fc9ba05131360_1280.jpg" 
+                                                     alt="Organic Red Cotton">
+                                                <div class="ml-4">
+                                                    <div class="text-sm font-medium text-gray-900">Organic Red Cotton</div>
+                                                    <div class="text-sm text-gray-500">ID: CT002</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                Cotton
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            AED 32.00
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">
+                                            8 meters
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-mono bg-gray-100 px-2 py-1 rounded">
+                                                |||| ||| |||||
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                                            <button class="text-accent hover:text-yellow-600">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-primary hover:text-slate-700">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-800">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <!-- @END_MAP )) -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Analytics Tab -->
+                    <div id="analytics-admin-tab" class="admin-tab-content hidden p-6">
+                        <h2 class="text-xl font-semibold mb-6">Sales Analytics</h2>
+                        
+                        <!-- Charts Placeholder -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                            <div class="bg-gray-50 rounded-lg p-6 h-64 flex items-center justify-center">
+                                <div class="text-center text-gray-500">
+                                    <i class="fas fa-chart-line text-4xl mb-2"></i>
+                                    <p>Revenue Chart</p>
+                                    <p class="text-sm"><!-- TODO: Implement charts using Chart.js --></p>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-6 h-64 flex items-center justify-center">
+                                <div class="text-center text-gray-500">
+                                    <i class="fas fa-chart-pie text-4xl mb-2"></i>
+                                    <p>Category Distribution</p>
+                                    <p class="text-sm"><!-- TODO: Implement charts using Chart.js --></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Key Metrics -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-6">
+                                <h3 class="text-lg font-semibold mb-2">Total Sales</h3>
+                                <p class="text-3xl font-bold">AED 125,430</p>
+                                <p class="text-blue-100 text-sm">+12% from last month</p>
+                            </div>
+                            <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-6">
+                                <h3 class="text-lg font-semibold mb-2">Best Seller</h3>
+                                <p class="text-2xl font-bold">Premium Silk</p>
+                                <p class="text-green-100 text-sm">87 meters sold</p>
+                            </div>
+                            <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-6">
+                                <h3 class="text-lg font-semibold mb-2">Avg. Rating</h3>
+                                <p class="text-3xl font-bold">4.8★</p>
+                                <p class="text-purple-100 text-sm">From 234 reviews</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Orders Tab -->
+                    <div id="orders-admin-tab" class="admin-tab-content hidden p-6">
+                        <h2 class="text-xl font-semibold mb-6">Recent Orders</h2>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-auto">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#ORD-2024-001</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Ahmed Al-Rashid</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">AED 180.00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                Completed
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Today</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#ORD-2024-002</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Sara Mohammed</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">AED 95.50</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                Processing
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Today</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: AdminPanel -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-inter font-bold mb-4">
+                        <span class="text-accent">Alreef</span> Fabric
+                    </h3>
+                    <p class="text-gray-300 text-sm">
+                        Your trusted partner for premium fabrics and textiles in the UAE.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Categories</h4>
+                    <ul class="space-y-2 text-gray-300 text-sm">
+                        <li><a href="#" class="hover:text-white">Silk Fabrics</a></li>
+                        <li><a href="#" class="hover:text-white">Cotton Blends</a></li>
+                        <li><a href="#" class="hover:text-white">Wool Materials</a></li>
+                        <li><a href="#" class="hover:text-white">Synthetic Fabrics</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-gray-300 text-sm">
+                        <li><a href="#" class="hover:text-white">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-white">Size Guide</a></li>
+                        <li><a href="#" class="hover:text-white">Care Instructions</a></li>
+                        <li><a href="#" class="hover:text-white">Returns</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-600 mt-8 pt-8 text-center text-gray-300 text-sm">
+                <p>&copy; 2024 Alreef Fabric. All rights reserved. | Currency: AED</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function() {
+            // Tab switching functionality
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active', 'border-accent', 'text-accent');
+                        btn.classList.add('border-transparent', 'text-muted');
+                    });
+                    
+                    // Add active class to clicked tab
+                    this.classList.remove('border-transparent', 'text-muted');
+                    this.classList.add('active', 'border-accent', 'text-accent');
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Show target tab content
+                    const targetContent = document.getElementById(targetTab + '-tab');
+                    if (targetContent) {
+                        targetContent.classList.remove('hidden');
+                    }
+                });
+            });
+
+            // Admin tab switching
+            const adminTabButtons = document.querySelectorAll('.admin-tab-btn');
+            const adminTabContents = document.querySelectorAll('.admin-tab-content');
+            
+            adminTabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-admin-tab');
+                    
+                    // Remove active class from all admin tabs
+                    adminTabButtons.forEach(btn => {
+                        btn.classList.remove('active', 'border-accent', 'text-accent');
+                        btn.classList.add('border-transparent', 'text-muted');
+                    });
+                    
+                    // Add active class to clicked admin tab
+                    this.classList.remove('border-transparent', 'text-muted');
+                    this.classList.add('active', 'border-accent', 'text-accent');
+                    
+                    // Hide all admin tab contents
+                    adminTabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Show target admin tab content
+                    const targetContent = document.getElementById(targetTab + '-admin-tab');
+                    if (targetContent) {
+                        targetContent.classList.remove('hidden');
+                    }
+                });
+            });
+
+            // TODO: Implement business logic for:
+            // - Product search and filtering
+            // - Shopping cart management
+            // - User authentication
+            // - Product image upload
+            // - Barcode generation
+            // - Order processing
+            // - Payment integration
+            // - Inventory management
+            // - Review submission
+            // - Analytics data fetching
+
+        })();
+    </script>
+</body>
+</html>
