@@ -8,7 +8,7 @@ if (!process.env.DATABASE_URL) {
 
 export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }, // required on Render
+  ssl: { rejectUnauthorized: false }, // Render requires SSL
 });
 
 export const db = drizzle(pool, { schema });
