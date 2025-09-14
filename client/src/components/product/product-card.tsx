@@ -86,7 +86,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
         
-        <Button className="w-full premium-button font-semibold text-base py-3">
+        <Button className="w-full premium-button font-semibold text-base py-3 h-11 touch-manipulation">
           Add to Cart
         </Button>
       </div>

@@ -53,21 +53,21 @@ export default function Home() {
             backgroundSize: "cover",
             backgroundPosition: "center"
           }}
-          className="h-[28rem] flex items-center relative"
+          className="h-[20rem] sm:h-[24rem] lg:h-[28rem] flex items-center relative"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-3xl">
-              <h1 className="text-6xl font-inter font-bold mb-6 leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-inter font-bold mb-4 sm:mb-6 leading-tight">
                 Premium Fabrics Collection
               </h1>
-              <p className="text-2xl mb-10 text-gray-100 leading-relaxed">
+              <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 lg:mb-10 text-gray-100 leading-relaxed">
                 Discover luxury textiles crafted with excellence for your creative vision
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="premium-button text-lg px-8 py-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <Button size="lg" className="premium-button text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 touch-manipulation">
                   Explore Collection
                 </Button>
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-luxury-navy bg-transparent text-lg px-8 py-4">
+                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-luxury-navy bg-transparent text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 touch-manipulation">
                   View Catalog
                 </Button>
               </div>
@@ -79,9 +79,9 @@ export default function Home() {
       {/* Categories Section */}
       <section className="py-20 bg-card dark:bg-card border-t border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-inter font-bold text-foreground mb-4">Browse by Category</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-bold text-foreground mb-3 sm:mb-4 px-4">Browse by Category</h2>
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
               Explore our curated collection of premium fabrics, each category offering unique textures and qualities
             </p>
           </div>
@@ -120,27 +120,27 @@ export default function Home() {
       {/* Featured Products Section */}
       <section className="py-20 bg-background dark:bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-16 gap-6">
-            <div>
-              <h2 className="text-4xl font-inter font-bold text-foreground mb-4">Featured Products</h2>
-              <p className="text-lg text-muted-foreground">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 sm:mb-16 gap-6">
+            <div className="px-4 lg:px-0">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-bold text-foreground mb-3 sm:mb-4">Featured Products</h2>
+              <p className="text-base sm:text-lg text-muted-foreground">
                 Handpicked selection of our finest fabrics
               </p>
             </div>
             
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 w-full lg:w-auto">
+            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 w-full lg:w-auto px-4 lg:px-0">
               <div className="relative flex-1 lg:w-80">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                 <Input
                   placeholder="Search luxury fabrics..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 border-luxury-gold/30 focus:border-luxury-copper bg-input text-foreground"
+                  className="pl-10 h-12 border-luxury-gold/30 focus:border-luxury-copper bg-input text-foreground touch-manipulation"
                 />
               </div>
               
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-full sm:w-48 border-luxury-gold/30 focus:border-luxury-copper">
+                <SelectTrigger className="w-full sm:w-48 h-12 border-luxury-gold/30 focus:border-luxury-copper touch-manipulation">
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
                 <SelectContent>
@@ -154,7 +154,7 @@ export default function Home() {
               </Select>
               
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-full sm:w-48 border-luxury-gold/30 focus:border-luxury-copper">
+                <SelectTrigger className="w-full sm:w-48 h-12 border-luxury-gold/30 focus:border-luxury-copper touch-manipulation">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

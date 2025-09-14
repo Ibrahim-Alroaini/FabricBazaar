@@ -321,8 +321,8 @@ export default function Admin() {
                 )}
 
                 {/* Products Table */}
-                <div className="overflow-x-auto">
-                  <table className="w-full table-auto">
+                <div className="mobile-scroll">
+                  <table className="mobile-table table-auto">
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -454,17 +454,17 @@ export default function Admin() {
               </TabsContent>
 
               <TabsContent value="orders" className="space-y-8">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <div>
-                    <h3 className="text-2xl font-inter font-bold text-luxury-copper">Order Management</h3>
+                    <h3 className="text-xl sm:text-2xl font-inter font-bold text-luxury-copper">Order Management</h3>
                     <p className="text-muted-foreground mt-1">Monitor and manage customer orders</p>
                   </div>
-                  <div className="flex space-x-3">
-                    <Button variant="outline" className="border-luxury-gold text-luxury-copper hover:bg-luxury-gold/10">
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                    <Button variant="outline" className="border-luxury-gold text-luxury-copper hover:bg-luxury-gold/10 touch-manipulation">
                       <Download className="h-4 w-4 mr-2" />
                       Export Orders
                     </Button>
-                    <Button className="premium-button">
+                    <Button className="premium-button touch-manipulation">
                       <Activity className="h-4 w-4 mr-2" />
                       Live Orders
                     </Button>
@@ -473,8 +473,8 @@ export default function Admin() {
                 
                 <Card className="border-luxury-gold/20 shadow-lg">
                   <CardContent className="p-0">
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
+                    <div className="mobile-scroll">
+                      <table className="mobile-table">
                         <thead className="bg-gradient-to-r from-luxury-gold/10 to-luxury-copper/10">
                           <tr className="border-b border-luxury-gold/20">
                             <th className="px-6 py-4 text-left text-sm font-bold text-luxury-copper uppercase tracking-wider">

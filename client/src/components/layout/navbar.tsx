@@ -23,14 +23,14 @@ export default function Navbar() {
   return (
     <nav className="bg-card dark:bg-card shadow-xl sticky top-0 z-50 border-b border-luxury-gold/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-18">
+        <div className="flex justify-between items-center h-16 sm:h-18">
           {/* Logo and Navigation */}
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Link href="/">
-                <h1 className="text-3xl font-inter font-bold cursor-pointer">
+                <h1 className="text-2xl sm:text-3xl font-inter font-bold cursor-pointer touch-manipulation">
                   <span className="luxury-gradient bg-clip-text text-transparent">Alreef</span> 
-                  <span className="text-foreground ml-2">Fabric</span>
+                  <span className="text-foreground ml-1 sm:ml-2">Fabric</span>
                 </h1>
               </Link>
             </div>
@@ -52,26 +52,26 @@ export default function Navbar() {
           </div>
 
           {/* Search Bar */}
-          <div className="flex-1 max-w-lg mx-6 hidden sm:block">
+          <div className="flex-1 max-w-lg mx-4 sm:mx-6 hidden sm:block">
             <div className="relative">
               <Input
                 type="text"
                 placeholder="Search luxury fabrics..."
-                className="w-full pl-12 pr-4 h-12 bg-input border-luxury-gold/30 focus:border-luxury-copper text-foreground"
+                className="w-full pl-12 pr-4 h-11 sm:h-12 bg-input border-luxury-gold/30 focus:border-luxury-copper text-foreground touch-manipulation"
               />
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-luxury-copper h-5 w-5" />
             </div>
           </div>
 
           {/* Right side buttons */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             {/* Mobile search */}
-            <Button variant="ghost" size="icon" className="md:hidden">
+            <Button variant="ghost" size="icon" className="md:hidden h-10 w-10 touch-manipulation">
               <Search className="h-5 w-5" />
             </Button>
 
             {/* Wishlist */}
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-luxury-copper transition-colors">
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-luxury-copper transition-colors h-10 w-10 touch-manipulation">
               <Heart className="h-5 w-5" />
             </Button>
 
@@ -195,7 +195,7 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden h-10 w-10 touch-manipulation"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -206,14 +206,14 @@ export default function Navbar() {
         {/* Mobile menu */}
         {isMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-luxury-gold/20 bg-card/95 backdrop-blur-sm">
               {navigation.map((item) => (
                 <Link key={item.name} href={item.href}>
                   <span 
-                    className={`block px-3 py-2 text-base font-medium cursor-pointer ${
+                    className={`block px-4 py-3 text-base font-medium cursor-pointer rounded-lg touch-manipulation transition-colors ${
                       location === item.href
-                        ? "text-accent"
-                        : "text-muted hover:text-accent"
+                        ? "text-luxury-copper bg-luxury-gold/10"
+                        : "text-muted-foreground hover:text-luxury-copper hover:bg-luxury-gold/5"
                     }`}
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -285,14 +285,14 @@ export default function Navbar() {
               )}
               
               {/* Mobile search */}
-              <div className="px-3 py-2">
+              <div className="px-4 py-3">
                 <div className="relative">
                   <Input
                     type="text"
                     placeholder="Search fabrics..."
-                    className="w-full pl-10 pr-4"
+                    className="w-full pl-10 pr-4 h-12 touch-manipulation border-luxury-gold/30 focus:border-luxury-copper"
                   />
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-luxury-copper h-5 w-5" />
                 </div>
               </div>
             </div>

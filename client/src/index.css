@@ -167,4 +167,21 @@
   .font-inter {
     font-family: var(--font-inter);
   }
+  
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+  
+  /* Mobile-first responsive utilities */
+  .mobile-scroll {
+    @apply overflow-x-auto;
+  }
+  
+  .mobile-table {
+    @apply min-w-full whitespace-nowrap;
+  }
+  
+  .mobile-card {
+    @apply min-w-[300px] flex-shrink-0;
+  }
 }

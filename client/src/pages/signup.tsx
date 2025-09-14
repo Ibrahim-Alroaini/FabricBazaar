@@ -234,7 +234,7 @@ export default function SignupPage() {
 
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full h-12 touch-manipulation"
                 disabled={isLoading}
               >
                 {isLoading ? (
