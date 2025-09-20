@@ -804,7 +804,17 @@ export class MemStorage implements IStorage {
       id,
       status: insertOrder.status || "pending",
       items: Array.isArray(insertOrder.items) ? insertOrder.items as Array<{productId: string, quantity: number, price: number, productName: string, total: number}> : [] as Array<{productId: string, quantity: number, price: number, productName: string, total: number}>,
-      createdAt: new Date()
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      userId: null,
+      customerId: null,
+      paymentMethod: null,
+      paymentStatus: null,
+      trackingNumber: null,
+      shippingAddress: null,
+      discountAmount: null,
+      taxAmount: null,
+      notes: null
     };
     this.orders.set(id, order);
     return order;
@@ -845,7 +855,11 @@ export class MemStorage implements IStorage {
       ...insertUser,
       id,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      isVerified: insertUser.isVerified || false,
+      role: insertUser.role || "customer",
+      phone: insertUser.phone || null,
+      address: insertUser.address || null
     };
     this.users.set(id, user);
     return user;
@@ -901,8 +915,12 @@ export class MemStorage implements IStorage {
       ...insertCustomer,
       id,
       createdAt: new Date(),
-      updatedAt: new Date(),
-      lastOrderAt: null
+      lastOrderAt: null,
+      totalOrders: 0,
+      totalSpent: "0.00",
+      phone: insertCustomer.phone || null,
+      address: insertCustomer.address || null,
+      userId: insertCustomer.userId || null
     };
     this.customers.set(id, customer);
     return customer;
@@ -914,8 +932,7 @@ export class MemStorage implements IStorage {
 
     const updated: Customer = { 
       ...existing, 
-      ...updateData, 
-      updatedAt: new Date() 
+      ...updateData
     };
     this.customers.set(id, updated);
     return updated;
@@ -935,7 +952,8 @@ export class MemStorage implements IStorage {
     const log: InventoryLog = {
       ...insertLog,
       id,
-      createdAt: new Date()
+      createdAt: new Date(),
+      reason: insertLog.reason || null
     };
     this.inventoryLogs.set(id, log);
     return log;
@@ -1033,7 +1051,8 @@ export class MemStorage implements IStorage {
         id: cartId,
         userId,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        sessionId: null
       };
       this.carts.set(cartId, cart);
     }
