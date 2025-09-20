@@ -68,7 +68,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         role: "customer",
         isVerified: false,
         phone: userData.phone,
-        address: userData.address
+        address: userData.address ? {
+          street: userData.address.street || '',
+          city: userData.address.city || '',
+          emirate: userData.address.emirate || '',
+          zipCode: userData.address.zipCode || ''
+        } : null
       });
       
       // Create customer record

@@ -536,12 +536,24 @@ export class MemStorage implements IStorage {
   private products: Map<string, Product>;
   private reviews: Map<string, Review>;
   private orders: Map<string, Order>;
+  private customers: Map<string, Customer>;
+  private users: Map<string, User>;
+  private sessions: Map<string, Session>;
+  private carts: Map<string, Cart>;
+  private cartItems: Map<string, CartItem>;
+  private inventoryLogs: Map<string, InventoryLog>;
 
   constructor() {
     this.categories = new Map();
     this.products = new Map();
     this.reviews = new Map();
     this.orders = new Map();
+    this.customers = new Map();
+    this.users = new Map();
+    this.sessions = new Map();
+    this.carts = new Map();
+    this.cartItems = new Map();
+    this.inventoryLogs = new Map();
     
     this.initializeData();
   }
@@ -820,179 +832,282 @@ export class MemStorage implements IStorage {
 
   // User authentication methods
   async getUserById(id: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.id, id));
-    return user || undefined;
+    return this.users.get(id);
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.email, email));
-    return user || undefined;
+    return Array.from(this.users.values()).find(user => user.email === email);
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const [user] = await db
-      .insert(users)
-      .values(insertUser)
-      .returning();
+    const id = randomUUID();
+    const user: User = {
+      ...insertUser,
+      id,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.users.set(id, user);
     return user;
   }
 
   async updateUser(id: string, updateData: Partial<InsertUser>): Promise<User | undefined> {
-    const [user] = await db
-      .update(users)
-      .set({ ...updateData, updatedAt: new Date() })
-      .where(eq(users.id, id))
-      .returning();
-    return user || undefined;
+    const existing = this.users.get(id);
+    if (!existing) return undefined;
+
+    const updated: User = { 
+      ...existing, 
+      ...updateData, 
+      updatedAt: new Date() 
+    };
+    this.users.set(id, updated);
+    return updated;
   }
 
   // Session management methods
   async createSession(insertSession: InsertSession): Promise<Session> {
-    const [session] = await db
-      .insert(sessions)
-      .values(insertSession)
-      .returning();
+    const session: Session = {
+      ...insertSession,
+      createdAt: new Date()
+    };
+    this.sessions.set(insertSession.id, session);
     return session;
   }
 
   async getSessionById(id: string): Promise<Session | undefined> {
-    const [session] = await db.select().from(sessions).where(eq(sessions.id, id));
-    return session || undefined;
+    return this.sessions.get(id);
   }
 
   async deleteSession(id: string): Promise<boolean> {
-    const result = await db.delete(sessions).where(eq(sessions.id, id));
-    return result.rowCount > 0;
+    return this.sessions.delete(id);
+  }
+
+  // Customer management methods
+  async getCustomers(): Promise<Customer[]> {
+    return Array.from(this.customers.values());
+  }
+
+  async getCustomerById(id: string): Promise<Customer | undefined> {
+    return this.customers.get(id);
+  }
+
+  async getCustomerByEmail(email: string): Promise<Customer | undefined> {
+    return Array.from(this.customers.values()).find(customer => customer.email === email);
+  }
+
+  async createCustomer(insertCustomer: InsertCustomer): Promise<Customer> {
+    const id = randomUUID();
+    const customer: Customer = {
+      ...insertCustomer,
+      id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      lastOrderAt: null
+    };
+    this.customers.set(id, customer);
+    return customer;
+  }
+
+  async updateCustomer(id: string, updateData: Partial<InsertCustomer>): Promise<Customer | undefined> {
+    const existing = this.customers.get(id);
+    if (!existing) return undefined;
+
+    const updated: Customer = { 
+      ...existing, 
+      ...updateData, 
+      updatedAt: new Date() 
+    };
+    this.customers.set(id, updated);
+    return updated;
+  }
+
+  // Inventory management methods
+  async getInventoryLogs(productId?: string): Promise<InventoryLog[]> {
+    const logs = Array.from(this.inventoryLogs.values());
+    if (productId) {
+      return logs.filter(log => log.productId === productId);
+    }
+    return logs;
+  }
+
+  async createInventoryLog(insertLog: InsertInventoryLog): Promise<InventoryLog> {
+    const id = randomUUID();
+    const log: InventoryLog = {
+      ...insertLog,
+      id,
+      createdAt: new Date()
+    };
+    this.inventoryLogs.set(id, log);
+    return log;
+  }
+
+  async getLowStockProducts(threshold: number = 10): Promise<Product[]> {
+    return Array.from(this.products.values()).filter(
+      product => product.isActive && product.stock <= threshold
+    );
+  }
+
+  async updateProductStock(id: string, newStock: number, reason?: string): Promise<boolean> {
+    const product = this.products.get(id);
+    if (!product) return false;
+
+    const previousStock = product.stock;
+    const quantity = newStock - previousStock;
+    const action = quantity > 0 ? 'add' : quantity < 0 ? 'remove' : 'adjustment';
+
+    // Update product stock
+    const updated: Product = { ...product, stock: newStock, updatedAt: new Date() };
+    this.products.set(id, updated);
+
+    // Log the inventory change
+    await this.createInventoryLog({
+      productId: id,
+      action,
+      quantity: Math.abs(quantity),
+      previousStock,
+      newStock,
+      reason: reason || `Stock ${action}`
+    });
+
+    return true;
+  }
+
+  // Order management methods  
+  async updateOrderPaymentStatus(id: string, paymentStatus: string): Promise<Order | undefined> {
+    const existing = this.orders.get(id);
+    if (!existing) return undefined;
+
+    const updated: Order = { 
+      ...existing, 
+      paymentStatus, 
+      updatedAt: new Date() 
+    };
+    this.orders.set(id, updated);
+    return updated;
+  }
+
+  async updateOrderTracking(id: string, trackingNumber: string): Promise<Order | undefined> {
+    const existing = this.orders.get(id);
+    if (!existing) return undefined;
+
+    const updated: Order = { 
+      ...existing, 
+      trackingNumber, 
+      updatedAt: new Date() 
+    };
+    this.orders.set(id, updated);
+    return updated;
   }
 
   // Shopping cart methods
   async getCartByUserId(userId: string): Promise<{ items: any[], total: number } | null> {
-    // Get or create cart
-    let [cart] = await db.select().from(carts).where(eq(carts.userId, userId));
-    
-    if (!cart) {
-      [cart] = await db
-        .insert(carts)
-        .values({ userId })
-        .returning();
-    }
+    const cart = Array.from(this.carts.values()).find(c => c.userId === userId);
+    if (!cart) return null;
 
-    // Get cart items with product details
-    const items = await db
-      .select({
-        id: cartItems.id,
-        cartId: cartItems.cartId,
-        productId: cartItems.productId,
-        quantity: cartItems.quantity,
-        priceAtTime: cartItems.priceAtTime,
-        productName: products.name,
-        productImage: sql`${products.images}->0`,
-        currentPrice: products.price,
-        stock: products.stock
-      })
-      .from(cartItems)
-      .innerJoin(products, eq(cartItems.productId, products.id))
-      .where(eq(cartItems.cartId, cart.id));
+    const items = Array.from(this.cartItems.values())
+      .filter(item => item.cartId === cart.id)
+      .map(item => {
+        const product = this.products.get(item.productId);
+        return {
+          id: item.id,
+          productId: item.productId,
+          quantity: item.quantity,
+          priceAtTime: item.priceAtTime,
+          productName: product?.name || 'Unknown Product',
+          productImage: product?.images[0] || '',
+          stock: product?.stock || 0
+        };
+      });
 
-    const total = items.reduce((sum, item) => 
-      sum + (parseFloat(item.priceAtTime) * item.quantity), 0
-    );
-
+    const total = items.reduce((sum, item) => sum + (parseFloat(item.priceAtTime) * item.quantity), 0);
     return { items, total };
   }
 
   async addToCart(userId: string, item: { productId: string, quantity: number, priceAtTime: string }): Promise<CartItem> {
-    // Get or create cart
-    let [cart] = await db.select().from(carts).where(eq(carts.userId, userId));
+    // Get or create cart for user
+    let cart = Array.from(this.carts.values()).find(c => c.userId === userId);
     
     if (!cart) {
-      [cart] = await db
-        .insert(carts)
-        .values({ userId })
-        .returning();
+      const cartId = randomUUID();
+      cart = {
+        id: cartId,
+        userId,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      this.carts.set(cartId, cart);
     }
 
     // Check if item already exists in cart
-    const [existingItem] = await db
-      .select()
-      .from(cartItems)
-      .where(and(
-        eq(cartItems.cartId, cart.id),
-        eq(cartItems.productId, item.productId)
-      ));
+    const existingItem = Array.from(this.cartItems.values()).find(
+      cartItem => cartItem.cartId === cart!.id && cartItem.productId === item.productId
+    );
 
     if (existingItem) {
-      // Update quantity
-      const [updatedItem] = await db
-        .update(cartItems)
-        .set({ 
-          quantity: existingItem.quantity + item.quantity,
-          updatedAt: new Date()
-        })
-        .where(eq(cartItems.id, existingItem.id))
-        .returning();
-      return updatedItem;
+      // Update existing item quantity
+      const updated: CartItem = {
+        ...existingItem,
+        quantity: existingItem.quantity + item.quantity,
+        updatedAt: new Date()
+      };
+      this.cartItems.set(existingItem.id, updated);
+      return updated;
     } else {
       // Add new item
-      const [newItem] = await db
-        .insert(cartItems)
-        .values({
-          cartId: cart.id,
-          productId: item.productId,
-          quantity: item.quantity,
-          priceAtTime: item.priceAtTime
-        })
-        .returning();
+      const itemId = randomUUID();
+      const newItem: CartItem = {
+        id: itemId,
+        cartId: cart.id,
+        productId: item.productId,
+        quantity: item.quantity,
+        priceAtTime: item.priceAtTime,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      this.cartItems.set(itemId, newItem);
       return newItem;
     }
   }
 
   async updateCartItem(itemId: string, quantity: number, userId: string): Promise<CartItem | undefined> {
-    // Verify the item belongs to the user's cart
-    const [item] = await db
-      .select()
-      .from(cartItems)
-      .innerJoin(carts, eq(cartItems.cartId, carts.id))
-      .where(and(
-        eq(cartItems.id, itemId),
-        eq(carts.userId, userId)
-      ));
+    const cartItem = this.cartItems.get(itemId);
+    if (!cartItem) return undefined;
 
-    if (!item) return undefined;
+    // Verify the item belongs to the user
+    const cart = this.carts.get(cartItem.cartId);
+    if (!cart || cart.userId !== userId) return undefined;
 
-    const [updatedItem] = await db
-      .update(cartItems)
-      .set({ quantity, updatedAt: new Date() })
-      .where(eq(cartItems.id, itemId))
-      .returning();
-    
-    return updatedItem || undefined;
+    const updated: CartItem = {
+      ...cartItem,
+      quantity,
+      updatedAt: new Date()
+    };
+    this.cartItems.set(itemId, updated);
+    return updated;
   }
 
   async removeFromCart(itemId: string, userId: string): Promise<boolean> {
-    // Verify the item belongs to the user's cart
-    const [item] = await db
-      .select()
-      .from(cartItems)
-      .innerJoin(carts, eq(cartItems.cartId, carts.id))
-      .where(and(
-        eq(cartItems.id, itemId),
-        eq(carts.userId, userId)
-      ));
+    const cartItem = this.cartItems.get(itemId);
+    if (!cartItem) return false;
 
-    if (!item) return false;
+    // Verify the item belongs to the user
+    const cart = this.carts.get(cartItem.cartId);
+    if (!cart || cart.userId !== userId) return false;
 
-    const result = await db.delete(cartItems).where(eq(cartItems.id, itemId));
-    return result.rowCount > 0;
+    return this.cartItems.delete(itemId);
   }
 
   async clearCart(userId: string): Promise<boolean> {
-    const [cart] = await db.select().from(carts).where(eq(carts.userId, userId));
+    const cart = Array.from(this.carts.values()).find(c => c.userId === userId);
     if (!cart) return true;
 
-    const result = await db.delete(cartItems).where(eq(cartItems.cartId, cart.id));
+    // Remove all cart items for this cart
+    const itemsToRemove = Array.from(this.cartItems.values()).filter(item => item.cartId === cart.id);
+    itemsToRemove.forEach(item => this.cartItems.delete(item.id));
+    
     return true;
   }
+
 }
 
 export const storage = new MemStorage();
